@@ -5,79 +5,286 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>仮説ラビット｜実践モード</title>
 <style>
-:root{--bg1:#fff8df;--bg2:#e9f7ff;--ink:#2b251f;--orange:#ff8b3d;--blue:#2e6fd8;--green:#21a67a;--red:#df5b5b;--card:#fffefa;--shadow:0 12px 26px rgba(49,38,17,.17)}
+:root{
+  --bg1:#fff8df;--bg2:#e9f7ff;--ink:#27211c;--orange:#ff8b3d;--blue:#2e6fd8;
+  --green:#15904c;--red:#f2495c;--purple:#7b4dd8;--card:#fffefa;
+}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",Meiryo,sans-serif;color:var(--ink);overflow:hidden}
-body{background:linear-gradient(135deg,var(--bg1),var(--bg2))}
-button{font:inherit;border:0;border-radius:18px;padding:12px 14px;font-weight:900;color:var(--ink);background:white;box-shadow:0 5px 0 #d8d0c4,0 10px 14px rgba(0,0,0,.12);cursor:pointer}
-button:active{transform:translateY(3px);box-shadow:0 2px 0 #d8d0c4}.primary{background:linear-gradient(#ffbd58,#ff8b3d);color:white}.blue{background:linear-gradient(#73aeff,#2e6fd8);color:white}.green{background:linear-gradient(#55d99f,#21a67a);color:white}
-.app{height:100dvh;display:flex;align-items:center;justify-content:center;padding:12px}
-.screen{display:none;width:min(1180px,100%);height:min(760px,100%);background:rgba(255,255,255,.82);border-radius:30px;box-shadow:var(--shadow);overflow:hidden;border:4px solid rgba(255,255,255,.9)}
-.screen.active{display:block}.topbar{height:60px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 16px;background:rgba(255,255,255,.7);border-bottom:2px dashed rgba(0,0,0,.08)}
-.brand{font-size:22px;font-weight:950}.pill{background:white;border-radius:999px;padding:7px 12px;font-weight:900;box-shadow:0 4px 10px rgba(0,0,0,.09)}
-.title{height:100%;display:grid;grid-template-columns:1.1fr .9fr;gap:15px;padding:38px}
-h1{font-size:clamp(48px,7vw,84px);line-height:1.02;margin:16px 0}.lead{font-size:clamp(19px,2.4vw,28px);font-weight:900;line-height:1.55}
-.rabbit-big{max-width:92%;max-height:86%;object-fit:contain;filter:drop-shadow(0 14px 22px rgba(0,0,0,.18))}
-.rabbit-stage{display:flex;align-items:center;justify-content:center}.start-buttons{display:flex;gap:14px;flex-wrap:wrap;margin-top:24px}
-.main{height:calc(100% - 60px);display:grid;grid-template-columns:1.02fr .98fr;gap:12px;padding:12px}
-.card{background:var(--card);border-radius:24px;padding:14px;box-shadow:0 8px 18px rgba(0,0,0,.08);border:2px solid rgba(0,0,0,.04)}
-.left,.right{display:flex;flex-direction:column;gap:10px;min-height:0}.problem-title{font-size:20px;font-weight:950;color:#59432b}
-.numbers{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:8px}.num{min-height:82px;border:3px solid #f0c069;border-radius:20px;background:linear-gradient(#fff,#fff3d8);display:flex;align-items:center;justify-content:center;text-align:center;font-size:27px;font-weight:950;line-height:1.25}
-.instruction{background:#f7fbff;border:2px dashed #7aa8dd;border-radius:17px;padding:10px 12px;font-weight:850;line-height:1.45;font-size:15px}
-.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;overflow:auto}.choice{text-align:left;min-height:50px;font-size:15px;border:3px solid transparent}.choice.selected{border-color:var(--orange);background:#fff4d2}.choice.correct{border-color:var(--green);background:#eafff5}.choice.wrong{border-color:var(--red);background:#fff0f0}
-.actions{display:flex;gap:10px;margin-top:auto}.actions button{flex:1}
-.rabbit-card{height:205px;display:grid;grid-template-columns:38% 62%;gap:8px;align-items:center}.rabbit{width:100%;height:100%;max-height:185px;object-fit:contain;filter:drop-shadow(0 9px 10px rgba(0,0,0,.18))}
-.speech{min-height:122px;display:flex;align-items:center;background:white;border:4px solid var(--ink);border-radius:24px;padding:13px;font-size:clamp(17px,2vw,22px);font-weight:950;line-height:1.42}
-.lab{flex:1;overflow:auto;min-height:0}.row{display:grid;grid-template-columns:92px 1fr 36px;gap:7px;align-items:center;padding:7px;margin:5px 0;background:#fffaf1;border-radius:13px;font-size:14px;font-weight:850}.mark{font-size:24px;font-weight:950;text-align:center}.ok{color:var(--green)}.ng{color:var(--red)}
-.hypo{background:#fff;border-radius:18px;border:2px solid #eee;padding:10px;margin-bottom:10px}.hypo-head{font-weight:950;margin-bottom:7px}
-.lesson{height:calc(100% - 60px);display:grid;grid-template-columns:.9fr 1.1fr;gap:14px;padding:16px}.step{font-size:21px;font-weight:900;line-height:1.65;overflow:auto}.formula{background:#fff7dc;border-radius:18px;padding:14px;margin:12px 0;text-align:center;font-size:24px;font-weight:950;line-height:1.6;white-space:pre-line}
-@media(max-width:820px){html,body{overflow:auto}.app{height:auto;min-height:100dvh}.screen{height:auto;min-height:760px;overflow:auto}.title,.main,.lesson{grid-template-columns:1fr}.choices,.numbers{grid-template-columns:1fr}.rabbit-card{height:auto;grid-template-columns:120px 1fr}}
+html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",Meiryo,sans-serif;color:var(--ink);background:linear-gradient(135deg,var(--bg1),var(--bg2))}
+body{overflow-x:hidden}
+.app{max-width:1180px;margin:auto;padding:16px}
+.card{background:rgba(255,255,255,.92);border-radius:28px;box-shadow:0 12px 28px rgba(0,0,0,.12);padding:18px;margin-bottom:16px}
+.title{display:grid;grid-template-columns:1.05fr .95fr;gap:16px;align-items:center}
+h1{font-size:clamp(42px,7vw,78px);line-height:1.02;margin:8px 0}
+.lead{font-size:clamp(18px,2.5vw,28px);font-weight:900;line-height:1.55}
+.rabbit{max-width:260px;width:70%;display:block;margin:auto;filter:drop-shadow(0 10px 12px rgba(0,0,0,.16))}
+button{border:0;border-radius:18px;padding:13px 18px;font-size:18px;font-weight:900;color:#fff;background:linear-gradient(#ffbd58,#ff8b3d);box-shadow:0 6px 0 #d8782e,0 12px 18px rgba(0,0,0,.12);cursor:pointer}
+button:active{transform:translateY(4px);box-shadow:0 2px 0 #d8782e}
+button.secondary{background:linear-gradient(#73aeff,#2e6fd8);box-shadow:0 6px 0 #245bb0}
+.badge{display:inline-block;background:#18b875;color:#fff;border-radius:999px;padding:7px 14px;font-weight:950}
+.problem{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.problem-box{background:#fff7dc;border:3px solid #f0c069;border-radius:20px;padding:18px;text-align:center;font-size:30px;font-weight:950}
+.choice-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.choice{color:var(--ink);background:white;box-shadow:0 4px 0 #d8d0c4,0 8px 14px rgba(0,0,0,.1);border:3px solid #ddd;text-align:left}
+.choice.selected{background:#fff1d8;border-color:#ff8b3d}
+.choice.correct{background:#eafff5;border-color:#8ee4bd}
+.choice.wrong{background:#fff0f0;border-color:#ffb0b0}
+.result-box{margin-top:14px;font-size:18px;font-weight:850;line-height:1.65}
+.good{background:#eafff5;border:2px solid #8ee4bd;border-radius:16px;padding:12px;margin-top:10px}
+.bad{background:#fff0f0;border:2px solid #ffb0b0;border-radius:16px;padding:12px;margin-top:10px}
+.explain{display:none}.explain.active{display:block}
+.explain-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:16px;align-items:stretch}
+.ex-rabbit{background:#fff;border-radius:24px;display:flex;align-items:center;justify-content:center;min-height:420px}
+.step-card{background:#fff;border-radius:24px;padding:18px;min-height:420px}
+.step-title{font-size:24px;font-weight:950;margin-bottom:12px}
+.formula{background:#fff7dc;border-radius:18px;padding:14px;margin:12px 0;text-align:center;font-size:28px;font-weight:950;line-height:1.65;white-space:pre-line}
+.note{font-size:20px;font-weight:900;line-height:1.65}
+.green{color:var(--green)}.orange{color:var(--orange)}.blue{color:var(--blue)}.purple{color:var(--purple)}.red{color:var(--red)}
+.small-list{font-size:21px;font-weight:900;line-height:1.8;background:#f7fbff;border:2px solid #b8d9ff;border-radius:18px;padding:14px}
+@media(max-width:800px){
+  .title,.explain-grid{grid-template-columns:1fr}
+  .problem,.choice-grid{grid-template-columns:1fr}
+  .problem-box{font-size:25px}
+  .formula{font-size:23px}
+}
 </style>
 </head>
 <body>
 <div class="app">
-<section id="title" class="screen active">
-  <div class="title"><div><div class="pill" style="display:inline-block">適性検査・実践モード</div><h1>仮説<br>ラビット<br>実践</h1><div class="lead">問題提示。<br>回答。<br>答え合わせ。<br>解説を次へで確認。</div><div class="start-buttons"><button class="primary" onclick="start()">実践スタート</button><button class="blue" onclick="location.href='index.html'">トレーニングへ</button></div></div><div class="rabbit-stage"><img class="rabbit-big" src="images/rabbit39.png" onerror="this.src='images/rabbit01.png';this.onerror=null;"></div></div>
+
+<section class="card title">
+  <div>
+    <div class="badge">適性検査・実践モード</div>
+    <h1>仮説<br>ラビット<br>実践</h1>
+    <div class="lead">問題を見る。<br>共通点を選ぶ。<br>答え合わせ。<br>最後の答えまでたどる。</div>
+    <div style="margin-top:18px">
+      <button onclick="start()">実践スタート</button>
+      <button class="secondary" onclick="location.href='index.html'">トレーニングへ</button>
+    </div>
+  </div>
+  <div><img class="rabbit" src="images/rabbit39.png" onerror="this.src='images/rabbit01.png';this.onerror=null;"></div>
 </section>
 
-<section id="practice" class="screen">
-  <div class="topbar"><div class="brand">実践モード</div><div class="pill">第 <span id="qno">1</span> 問</div><div class="pill">得点 <span id="score">0</span></div></div>
-  <div class="main"><div class="left"><div class="card"><div id="ptitle" class="problem-title"></div><div id="numbers" class="numbers"></div></div><div class="instruction">共通しているものを選んで「答える」。中心になる見方を選べるか試そう。</div><div id="choices" class="choices"></div><div class="actions"><button class="blue" onclick="clearSel()">選び直す</button><button class="primary" onclick="answer()">答える</button></div></div>
-  <div class="right"><div class="card rabbit-card"><img id="rabbit" class="rabbit" src="images/rabbit57.png" onerror="this.src='images/rabbit01.png';this.onerror=null;"><div id="speech" class="speech">問題を見て、使えそうな見方を選ぼう。</div></div><div class="card lab"><b>答え合わせ</b><div id="feedback" class="instruction" style="margin-top:8px">答えると、ここに結果が出ます。</div><div id="nextArea" style="margin-top:10px"></div></div></div></div>
+<section id="practice" class="card">
+  <h2 id="qTitle">共通点を選ぼう</h2>
+  <div id="problems" class="problem"></div>
+  <p class="note">中心になる共通点を選ぼう。浅い共通点やダミーも混ざっているよ。</p>
+  <div id="choices" class="choice-grid"></div>
+  <div style="margin-top:14px">
+    <button onclick="answer()">答える</button>
+    <button class="secondary" onclick="clearChoice()">選び直す</button>
+  </div>
+  <div id="feedback" class="result-box"></div>
+  <div id="nextArea" style="margin-top:14px"></div>
 </section>
 
-<section id="explain" class="screen">
-  <div class="topbar"><div class="brand" id="exBrand">解説</div><button onclick="nextQ()">次の問題へ</button></div>
-  <div class="lesson"><div class="card rabbit-stage"><img id="exRabbit" class="rabbit-big" src="images/rabbit44.png" onerror="this.src='images/rabbit10.png';this.onerror=null;"></div><div class="card step"><div id="exText"></div><div id="exFormula" class="formula"></div><button class="primary" onclick="nextExplain()">次へ</button></div></div>
+<section id="explain" class="card explain">
+  <h2 id="exHead">解説</h2>
+  <div class="explain-grid">
+    <div class="ex-rabbit">
+      <img id="exRabbit" class="rabbit" src="images/rabbit44.png" onerror="this.src='images/rabbit10.png';this.onerror=null;">
+    </div>
+    <div class="step-card">
+      <div id="stepTitle" class="step-title"></div>
+      <div id="stepNote" class="note"></div>
+      <div id="stepFormula" class="formula"></div>
+      <div style="margin-top:18px">
+        <button onclick="nextStep()">次へ</button>
+      </div>
+    </div>
+  </div>
 </section>
 
-<section id="result" class="screen">
-  <div class="topbar"><div class="brand">結果</div><button onclick="start()">もう一回</button></div>
-  <div class="title"><div><h1><span id="finalScore">0</span>点</h1><div id="comment" class="lead"></div><div class="start-buttons"><button class="primary" onclick="start()">もう一回</button><button class="blue" onclick="location.href='index.html'">トレーニングへ</button></div></div><div class="rabbit-stage"><img class="rabbit-big" src="images/rabbit44.png" onerror="this.src='images/rabbit10.png';this.onerror=null;"></div></div>
+<section id="finish" class="card" style="display:none">
+  <h2>実践完了</h2>
+  <div class="lead" id="finishText"></div>
+  <div style="margin-top:18px">
+    <button onclick="start()">もう一回</button>
+    <button class="secondary" onclick="location.href='index.html'">トレーニングへ</button>
+  </div>
 </section>
+
 </div>
 
 <script>
-const R={wait:"images/rabbit57.png",think:"images/rabbit60.png",hmm:"images/rabbit56.png",ok:"images/rabbit44.png",spark:"images/rabbit29.png",wow:"images/rabbit39.png"};
-const qs=[
-{title:"共通点を選ぼう①",nums:["33×37","42×48","76×74"],choices:[["same_tens","10の位が同じ",1],[ "ones_sum10","1けたの和が10",1],["all_even","3つとも偶数どうし",0],["diff_same","差が全部同じ",0],["two_digit","2けた×2けた",0.3],["tens_sum10","10の位の和が10",0]],checks:{same_tens:[["33×37","3と3","○"],["42×48","4と4","○"],["76×74","7と7","○"]],ones_sum10:[["33×37","3+7=10","○"],["42×48","2+8=10","○"],["76×74","6+4=10","○"]],all_even:[["33×37","奇数×奇数","×"],["42×48","偶数×偶数","○"],["76×74","偶数×偶数","○"]],diff_same:[["33×37","差4","×"],["42×48","差6","×"],["76×74","差2","×"]],two_digit:[["33×37","2けた","○"],["42×48","2けた","○"],["76×74","2けた","○"]],tens_sum10:[["33×37","3+3=6","×"],["42×48","4+4=8","×"],["76×74","7+7=14","×"]]},main:["same_tens","ones_sum10"],ex:[["spark","中心条件は2つ。","10の位が同じ／1けたの和が10"],["think","33×37で声に出して考える。","30×7＋30×3＝30×(7＋3)"],["ok","7＋3＝10だから楽になる。","30×10"],["think","42×48も同じ。","40×8＋40×2＝40×10"],["ok","76×74も同じ。","70×6＋70×4＝70×10"]]},
-{title:"共通点を選ぼう②",nums:["51×59","64×66","82×88"],choices:[["same_tens","10の位が同じ",1],["ones_sum10","1けたの和が10",1],["all_odd","3つとも奇数どうし",0],["diff8","差が全部8",0],["include6","どれも6を含む",0],["two_digit","2けた×2けた",0.3]],checks:{same_tens:[["51×59","5と5","○"],["64×66","6と6","○"],["82×88","8と8","○"]],ones_sum10:[["51×59","1+9=10","○"],["64×66","4+6=10","○"],["82×88","2+8=10","○"]],all_odd:[["51×59","奇数×奇数","○"],["64×66","偶数×偶数","×"],["82×88","偶数×偶数","×"]],diff8:[["51×59","差8","○"],["64×66","差2","×"],["82×88","差6","×"]],include6:[["51×59","6なし","×"],["64×66","6あり","○"],["82×88","6なし","×"]],two_digit:[["51×59","2けた","○"],["64×66","2けた","○"],["82×88","2けた","○"]]},main:["same_tens","ones_sum10"],ex:[["spark","同じ型を見つける問題。","10の位が同じ／1けたの和が10"],["think","51×59。次へを押す前に声で。","50×9＋50×1＝50×10"],["think","64×66も同じ。","60×6＋60×4＝60×10"],["ok","82×88も同じ。","80×8＋80×2＝80×10"]]},
-{title:"数列の共通点",nums:["12,24,36","15,30,45","18,36,54"],choices:[["plus_same","同じ数ずつ増える",1],["times123","1倍・2倍・3倍",1],["all_even","全部偶数",0],["plus10","10ずつ増える",0],["three_nums","3つの数が並ぶ",0.3],["include5","どれも5を含む",0]],checks:{plus_same:[["12,24,36","+12,+12","○"],["15,30,45","+15,+15","○"],["18,36,54","+18,+18","○"]],times123:[["12,24,36","12×1,×2,×3","○"],["15,30,45","15×1,×2,×3","○"],["18,36,54","18×1,×2,×3","○"]],all_even:[["12,24,36","偶数","○"],["15,30,45","奇数あり","×"],["18,36,54","偶数","○"]],plus10:[["12,24,36","+12","×"],["15,30,45","+15","×"],["18,36,54","+18","×"]],three_nums:[["12,24,36","3つ","○"],["15,30,45","3つ","○"],["18,36,54","3つ","○"]],include5:[["12,24,36","5なし","×"],["15,30,45","5あり","○"],["18,36,54","5なし","×"]]},main:["plus_same","times123"],ex:[["spark","数列は差と倍率で見る。","差を見る／倍を見る"],["think","12,24,36は12ずつ増える。","+12, +12"],["think","倍率ならもっと整理できる。","12×1,12×2,12×3"],["ok","他の2つも同じ。","15×1,15×2,15×3\n18×1,18×2,18×3"]]}
+const questions = [
+  {
+    title:"共通点を選ぼう①",
+    problems:["42×48","51×59","64×66"],
+    choices:[
+      {id:"same_tens", text:"10の位が同じ", good:true},
+      {id:"ones_sum10", text:"1けたの数字を足すと10", good:true},
+      {id:"all_even", text:"3つとも偶数どうし", good:false},
+      {id:"diff_same", text:"差が全部同じ", good:false},
+      {id:"two_digit", text:"全部2けた×2けた", good:false},
+      {id:"same_answer", text:"答えが全部同じ", good:false}
+    ],
+    feedback:{
+      same_tens:[["42×48","4と4 ○"],["51×59","5と5 ○"],["64×66","6と6 ○"]],
+      ones_sum10:[["42×48","2+8=10 ○"],["51×59","1+9=10 ○"],["64×66","4+6=10 ○"]],
+      all_even:[["42×48","偶数どうし ○"],["51×59","奇数どうし ×"],["64×66","偶数どうし ○"]],
+      diff_same:[["42×48","差6 ×"],["51×59","差8 ×"],["64×66","差2 ×"]],
+      two_digit:[["42×48","2けた ○"],["51×59","2けた ○"],["64×66","2けた ○"]],
+      same_answer:[["42×48","2016"],["51×59","3009"],["64×66","4224"]]
+    },
+    required:["same_tens","ones_sum10"],
+    rabbit:"images/rabbit44.png",
+    explain:[
+      {r:"images/rabbit29.png",title:"42×48を最後まで考える",note:"途中でやめない。4つに分けて、最後の答えまで行くよ。",formula:"42×48"},
+      {r:"images/rabbit60.png",title:"4つに分ける",note:"42は40と2、48は40と8として見る。",formula:"① 40×40 = 1600\n② 40×8 = 320\n③ 2×40 = 80\n④ 2×8 = 16"},
+      {r:"images/rabbit56.png",title:"まず全部足すと",note:"そのまま足すと、こうなる。",formula:"1600 + 320 + 80 + 16\n= 2016"},
+      {r:"images/rabbit29.png",title:"ここで気づく",note:"②と③は、どちらも40が出てくる。だからまとめられる。",formula:"② 40×8 + ③ 2×40"},
+      {r:"images/rabbit44.png",title:"まとめて楽にする",note:"8と2を足すと10。だから40が10回分になる。",formula:"40×8 + 2×40\n= 40×(8+2)\n= 40×10\n= 400"},
+      {r:"images/rabbit44.png",title:"最後の答えまで行く",note:"①、②③まとめたもの、④を足す。",formula:"①1600 + ②③400 + ④16\n= 2016\nだから、42×48 = 2016"},
+      {r:"images/rabbit39.png",title:"51×59も同じ",note:"声に出してから次へ。",formula:"50×50 + 50×9 + 1×50 + 1×9\n②③：50×9 + 1×50 = 50×10 = 500\n2500 + 500 + 9 = 3009"},
+      {r:"images/rabbit39.png",title:"64×66も同じ",note:"最後まで答えを出すと、工夫が本物になる。",formula:"60×60 + 60×6 + 4×60 + 4×6\n②③：60×6 + 4×60 = 60×10 = 600\n3600 + 600 + 24 = 4224"}
+    ]
+  },
+  {
+    title:"共通点を選ぼう②",
+    problems:["71×79","82×88","93×97"],
+    choices:[
+      {id:"same_tens", text:"10の位が同じ", good:true},
+      {id:"ones_sum10", text:"1けたの数字を足すと10", good:true},
+      {id:"all_odd", text:"3つとも奇数どうし", good:false},
+      {id:"include9", text:"どの式にも9が入る", good:false},
+      {id:"diff_same", text:"差が全部同じ", good:false},
+      {id:"two_digit", text:"全部2けた×2けた", good:false}
+    ],
+    feedback:{
+      same_tens:[["71×79","7と7 ○"],["82×88","8と8 ○"],["93×97","9と9 ○"]],
+      ones_sum10:[["71×79","1+9=10 ○"],["82×88","2+8=10 ○"],["93×97","3+7=10 ○"]],
+      all_odd:[["71×79","奇数どうし ○"],["82×88","偶数どうし ×"],["93×97","奇数どうし ○"]],
+      include9:[["71×79","79に9 ○"],["82×88","9なし ×"],["93×97","どちらも9あり ○"]],
+      diff_same:[["71×79","差8 ×"],["82×88","差6 ×"],["93×97","差4 ×"]],
+      two_digit:[["71×79","2けた ○"],["82×88","2けた ○"],["93×97","2けた ○"]]
+    },
+    required:["same_tens","ones_sum10"],
+    rabbit:"images/rabbit44.png",
+    explain:[
+      {r:"images/rabbit29.png",title:"71×79を最後まで考える",note:"見方は同じ。最後まで答えを出す。",formula:"71×79"},
+      {r:"images/rabbit60.png",title:"4つに分ける",note:"71は70と1、79は70と9。",formula:"① 70×70 = 4900\n② 70×9 = 630\n③ 1×70 = 70\n④ 1×9 = 9"},
+      {r:"images/rabbit29.png",title:"②と③をまとめる",note:"どちらも70が出てくる。9+1=10。",formula:"70×9 + 1×70\n= 70×(9+1)\n= 70×10\n= 700"},
+      {r:"images/rabbit44.png",title:"最後の答え",note:"①、まとめた700、④を足す。",formula:"4900 + 700 + 9\n= 5609\nだから、71×79 = 5609"},
+      {r:"images/rabbit39.png",title:"82×88も同じ",note:"途中で止めず、最後まで。",formula:"80×80 + 80×8 + 2×80 + 2×8\n②③：80×8 + 2×80 = 80×10 = 800\n6400 + 800 + 16 = 7216"},
+      {r:"images/rabbit39.png",title:"93×97も同じ",note:"共通点が、答えまでの道具になる。",formula:"90×90 + 90×7 + 3×90 + 3×7\n②③：90×7 + 3×90 = 90×10 = 900\n8100 + 900 + 21 = 9021"}
+    ]
+  }
 ];
-let qi=0,sel=new Set(),score=0,answered=false,exi=0;
-function $(id){return document.getElementById(id)}function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));$(id).classList.add("active")}
-function rabbit(k){$("rabbit").src=R[k]||R.wait}function speech(t){$("speech").textContent=t}
-function start(){qi=0;score=0;renderQ();show("practice")}
-function renderQ(){const q=qs[qi];sel=new Set();answered=false;$("qno").textContent=qi+1;$("score").textContent=score;$("ptitle").textContent=q.title;$("numbers").innerHTML=q.nums.map(n=>`<div class="num">${n}</div>`).join("");$("feedback").innerHTML="答えると、ここに結果が出ます。";$("nextArea").innerHTML="";speech("問題を見て、使えそうな見方を選ぼう。");rabbit("wait");renderChoices()}
-function renderChoices(){const q=qs[qi];$("choices").innerHTML=q.choices.map(c=>`<button class="choice ${sel.has(c[0])?'selected':''} ${answered&&c[2]>0?'correct':''} ${answered&&sel.has(c[0])&&c[2]==0?'wrong':''}" ${answered?'disabled':''} onclick="toggle('${c[0]}')">${c[1]}</button>`).join("")}
-function toggle(id){if(answered)return;sel.has(id)?sel.delete(id):sel.add(id);renderChoices()}
-function clearSel(){if(answered)return;sel=new Set();renderChoices()}
-function answer(){if(sel.size==0){speech("まずは1つ以上選ぼう。");rabbit("hmm");return}answered=true;const q=qs[qi];let add=0;q.choices.forEach(c=>{if(sel.has(c[0])&&c[2]==1)add+=10;if(sel.has(c[0])&&c[2]==0.3)add+=3;if(sel.has(c[0])&&c[2]==0)add-=4;if(!sel.has(c[0])&&q.main.includes(c[0]))add-=5});if(add<0)add=0;score+=add;$("score").textContent=score;renderChoices();feedback(q,add);speech(add>=18?"いいね。中心条件を選べた！":"答え合わせで、どこが使えるか見てみよう。");rabbit(add>=18?"ok":"hmm");$("nextArea").innerHTML='<button class="primary" onclick="startExplain()">解説を見る</button>'}
-function feedback(q,add){let html=`<div class="instruction"><b>今回 +${add}点</b></div>`;q.choices.filter(c=>sel.has(c[0])).forEach(c=>{html+=`<div class="hypo"><div class="hypo-head">${c[1]}</div>`;(q.checks[c[0]]||[]).forEach(r=>html+=`<div class="row"><div>${r[0]}</div><div>${r[1]}</div><div class="mark ${r[2]=='○'?'ok':'ng'}">${r[2]}</div></div>`);html+=`</div>`});$("feedback").innerHTML=html}
-function startExplain(){exi=0;renderEx();show("explain")}
-function renderEx(){const s=qs[qi].ex[exi];$("exBrand").textContent=qs[qi].title+"：解説";$("exText").textContent=s[1];$("exFormula").textContent=s[2];$("exRabbit").src=R[s[0]]||R.ok}
-function nextExplain(){exi++;if(exi>=qs[qi].ex.length){nextQ();return}renderEx()}
-function nextQ(){qi++;if(qi>=qs.length){$("finalScore").textContent=score;$("comment").textContent=score>=55?"かなり良い。見方が実践で使えている。":score>=35?"いい感じ。中心条件を優先して選ぼう。":"トレーニングで仮説→検証をもう一度練習しよう。";show("result");return}renderQ();show("practice")}
+
+let qIndex = 0;
+let selected = new Set();
+let answered = false;
+let exStep = 0;
+
+function $(id){return document.getElementById(id)}
+
+function start(){
+  qIndex = 0;
+  selected = new Set();
+  answered = false;
+  $("finish").style.display="none";
+  renderQuestion();
+  $("practice").scrollIntoView({behavior:"smooth"});
+}
+
+function renderQuestion(){
+  const q = questions[qIndex];
+  selected = new Set();
+  answered = false;
+  $("qTitle").textContent = q.title;
+  $("problems").innerHTML = q.problems.map(p=>`<div class="problem-box">${p}</div>`).join("");
+  $("choices").innerHTML = "";
+  q.choices.forEach(c=>{
+    const b = document.createElement("button");
+    b.className = "choice";
+    b.textContent = c.text;
+    b.onclick = ()=>{
+      if(answered)return;
+      if(selected.has(c.id)){selected.delete(c.id); b.classList.remove("selected");}
+      else{selected.add(c.id); b.classList.add("selected");}
+    };
+    $("choices").appendChild(b);
+  });
+  $("feedback").innerHTML = "";
+  $("nextArea").innerHTML = "";
+  $("explain").classList.remove("active");
+}
+
+function clearChoice(){
+  if(answered)return;
+  selected = new Set();
+  document.querySelectorAll(".choice").forEach(b=>b.classList.remove("selected"));
+}
+
+function answer(){
+  const q = questions[qIndex];
+  if(selected.size===0){
+    $("feedback").innerHTML = `<div class="bad">まずは1つ以上選ぼう。</div>`;
+    return;
+  }
+  answered = true;
+
+  document.querySelectorAll(".choice").forEach((b,i)=>{
+    const c = q.choices[i];
+    if(c.good)b.classList.add("correct");
+    if(selected.has(c.id) && !c.good)b.classList.add("wrong");
+  });
+
+  let html = "";
+  q.choices.filter(c=>selected.has(c.id)).forEach(c=>{
+    const good = c.good;
+    html += `<div class="${good?'good':'bad'}"><b>${c.text}</b><br>`;
+    (q.feedback[c.id]||[]).forEach(row=>html += `${row[0]} → ${row[1]}<br>`);
+    html += good ? "これは中心になる共通点として使える。<br>" : "これは中心になる共通点ではない。<br>";
+    html += `</div>`;
+  });
+
+  const ok = q.required.every(id=>selected.has(id));
+  if(ok){
+    html += `<div class="good"><b>中心条件OK。</b><br>この共通点を使って、最後の答えまで進もう。</div>`;
+    $("nextArea").innerHTML = `<button onclick="startExplain()">解説を見る</button>`;
+  }else{
+    html += `<div class="bad"><b>中心条件がまだ足りない。</b><br>「10の位が同じ」「1けたの和が10」を見つけたい。</div>`;
+  }
+  $("feedback").innerHTML = html;
+}
+
+function startExplain(){
+  exStep = 0;
+  $("explain").classList.add("active");
+  renderExplain();
+  $("explain").scrollIntoView({behavior:"smooth"});
+}
+
+function renderExplain(){
+  const q = questions[qIndex];
+  const s = q.explain[exStep];
+  $("exHead").textContent = q.title + "：解説";
+  $("exRabbit").src = s.r;
+  $("stepTitle").textContent = s.title;
+  $("stepNote").textContent = s.note;
+  $("stepFormula").textContent = s.formula;
+}
+
+function nextStep(){
+  const q = questions[qIndex];
+  exStep++;
+  if(exStep < q.explain.length){
+    renderExplain();
+    return;
+  }
+
+  qIndex++;
+  if(qIndex < questions.length){
+    renderQuestion();
+    $("practice").scrollIntoView({behavior:"smooth"});
+  }else{
+    $("finish").style.display="block";
+    $("finishText").textContent="最後まで答えを出す練習ができました。工夫は、途中で止めずに答えまでつなげてこそ力になります。";
+    $("finish").scrollIntoView({behavior:"smooth"});
+  }
+}
 </script>
 </body>
 </html>
