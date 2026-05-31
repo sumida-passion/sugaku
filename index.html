@@ -1,62 +1,348 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>仮説ラビット｜トレーニングモード</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>仮説ラビット｜適性検査トレーニング</title>
 <style>
-:root{--bg1:#fff8df;--bg2:#e9f7ff;--ink:#2b251f;--orange:#ff8b3d;--blue:#2e6fd8;--green:#21a67a;--red:#df5b5b;--card:#fffefa;--shadow:0 12px 26px rgba(49,38,17,.17)}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",Meiryo,sans-serif;color:var(--ink);overflow:hidden}body{background:radial-gradient(circle at 10% 8%,rgba(255,255,255,.85) 0 7%,transparent 8%),radial-gradient(circle at 90% 12%,rgba(255,255,255,.8) 0 5%,transparent 6%),linear-gradient(135deg,var(--bg1),var(--bg2))}
-button{font:inherit;border:0;border-radius:20px;padding:13px 16px;font-weight:900;color:var(--ink);background:white;box-shadow:0 6px 0 #d8d0c4,0 12px 18px rgba(0,0,0,.13);cursor:pointer;touch-action:manipulation}button:active{transform:translateY(4px);box-shadow:0 2px 0 #d8d0c4,0 6px 12px rgba(0,0,0,.12)}.primary{background:linear-gradient(#ffbd58,#ff8b3d);color:white}.blue{background:linear-gradient(#73aeff,#2e6fd8);color:white}.green{background:linear-gradient(#55d99f,#21a67a);color:white}
-.app{height:100dvh;display:flex;align-items:center;justify-content:center;padding:12px}.screen{display:none;position:relative;width:min(1180px,100%);height:min(760px,100%);background:rgba(255,255,255,.78);border:4px solid rgba(255,255,255,.92);border-radius:30px;box-shadow:var(--shadow);overflow:hidden}.screen.active{display:block}.topbar{height:62px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 16px;background:rgba(255,255,255,.65);border-bottom:2px dashed rgba(0,0,0,.08)}.brand{font-size:23px;font-weight:900}.pill{background:#fff;border-radius:999px;padding:8px 13px;font-weight:900;box-shadow:0 5px 12px rgba(0,0,0,.09);white-space:nowrap}
-.title-layout{height:100%;display:grid;grid-template-columns:1.12fr .88fr;gap:16px;padding:36px}h1{font-size:clamp(44px,7vw,84px);line-height:1.02;margin:18px 0 12px}.subtitle{font-size:clamp(18px,2.4vw,28px);font-weight:850;line-height:1.6}.rabbit-stage{display:flex;align-items:center;justify-content:center}.rabbit-big{max-width:93%;max-height:86%;object-fit:contain;filter:drop-shadow(0 14px 22px rgba(0,0,0,.18))}.start-buttons{display:flex;gap:14px;flex-wrap:wrap;margin-top:26px}
-.main{height:calc(100% - 62px);display:grid;grid-template-columns:1.05fr .95fr;gap:14px;padding:14px}.card{background:var(--card);border-radius:25px;padding:15px;border:2px solid rgba(0,0,0,.04);box-shadow:0 8px 19px rgba(0,0,0,.08)}.left,.right{display:flex;flex-direction:column;gap:10px;min-height:0}.problem-title{font-size:21px;font-weight:900;color:#59432b}.numbers{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.num-card{min-height:92px;border:3px solid #f0c069;border-radius:22px;background:linear-gradient(#fff,#fff3d8);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:31px;font-weight:950;box-shadow:inset 0 -5px 0 rgba(0,0,0,.04)}.num-card small{font-size:13px;color:#7c6a54;margin-top:4px}.instruction{background:#f7fbff;border:2px dashed #7aa8dd;border-radius:18px;padding:11px 13px;font-weight:850;line-height:1.48;font-size:16px}.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;overflow:auto;padding-right:2px}.choice{min-height:54px;text-align:left;background:#fff;border:3px solid transparent;box-shadow:0 4px 0 #d8d0c4,0 9px 14px rgba(0,0,0,.10);font-size:15px}.choice.selected{border-color:var(--orange);background:#fff4d2}.choice.usable{border-color:var(--green);background:#eafff5}.actions{display:flex;gap:10px;margin-top:auto}.actions button{flex:1}
-.rabbit-card{height:224px;display:grid;grid-template-columns:40% 60%;gap:8px;align-items:center}.rabbit{width:100%;height:100%;max-height:200px;object-fit:contain;filter:drop-shadow(0 9px 10px rgba(0,0,0,.18))}.rabbit.bump{animation:bump .32s ease}.speech{min-height:130px;display:flex;align-items:center;position:relative;background:white;border:4px solid var(--ink);border-radius:25px;padding:14px;font-size:clamp(17px,2.1vw,23px);font-weight:900;line-height:1.45}.speech:before{content:"";position:absolute;left:-22px;top:50%;border-width:12px 22px 12px 0;border-style:solid;border-color:transparent var(--ink) transparent transparent}.speech:after{content:"";position:absolute;left:-15px;top:calc(50% + 3px);border-width:9px 17px 9px 0;border-style:solid;border-color:transparent white transparent transparent}
-.lab{flex:1;min-height:0;overflow:auto}.lab-title{font-size:18px;font-weight:950;margin-bottom:8px}.hypo-card{background:#fff;border-radius:18px;border:2px solid #eee;padding:10px;margin-bottom:10px}.hypo-head{display:flex;justify-content:space-between;gap:8px;align-items:center;font-weight:950;margin-bottom:8px}.badge{border-radius:999px;padding:5px 10px;font-size:13px;color:white;white-space:nowrap}.badge.good{background:var(--green)}.badge.bad{background:var(--red)}.check-row{display:grid;grid-template-columns:92px 1fr 34px;gap:7px;align-items:center;padding:7px;margin:5px 0;background:#fffaf1;border-radius:13px;font-size:14px;font-weight:850}.mark{font-size:25px;font-weight:950;text-align:center}.ok{color:var(--green)}.ng{color:var(--red)}.useful-box{background:#eafff5;border:2px solid #8ee4bd;border-radius:18px;padding:10px;font-weight:900;line-height:1.45;margin-top:8px}.next-area{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}.mini-log{height:74px;overflow:auto;background:#fff;border:2px solid #eee;border-radius:16px;padding:8px;font-size:13px;line-height:1.4}
-.lesson{height:calc(100% - 62px);display:grid;grid-template-columns:.9fr 1.1fr;gap:16px;padding:18px}.lesson-panel{display:flex;flex-direction:column;gap:12px;overflow:auto}.step-card{background:#fff;border-radius:22px;border:3px solid #f0c069;padding:15px;font-weight:900;font-size:21px;line-height:1.55}.formula{text-align:center;background:#fff7dc;border-radius:18px;padding:14px;font-size:24px;font-weight:950;line-height:1.6}.confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none}.piece{position:absolute;width:12px;height:18px;border-radius:4px;animation:fall 1.2s linear forwards}@keyframes fall{to{transform:translateY(830px) rotate(720deg);opacity:.15}}@keyframes bump{50%{transform:scale(1.08) rotate(-2deg)}}@media(max-width:820px){html,body{overflow:auto}.app{height:auto;min-height:100dvh}.screen{height:auto;min-height:760px;overflow:auto}.title-layout,.main,.lesson{grid-template-columns:1fr}.choices,.numbers{grid-template-columns:1fr}.rabbit-card{height:auto;grid-template-columns:120px 1fr}}
+  :root{
+    --bg1:#fff7df;
+    --bg2:#e9f7ff;
+    --main:#ff8b3d;
+    --sub:#2e6fd8;
+    --good:#21a67a;
+    --bad:#df5b5b;
+    --ink:#2b251f;
+    --card:#fffefa;
+    --shadow:0 12px 28px rgba(47,38,20,.18);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",Meiryo,sans-serif;color:var(--ink);overflow:hidden}
+  body{
+    background:
+      radial-gradient(circle at 12% 8%, #fff 0 7%, transparent 8%),
+      radial-gradient(circle at 90% 14%, #fff 0 5%, transparent 6%),
+      linear-gradient(135deg,var(--bg1),var(--bg2));
+  }
+  .app{height:100dvh;display:flex;align-items:center;justify-content:center;padding:14px}
+  .screen{
+    width:min(1180px,100%);
+    height:min(760px,100%);
+    background:rgba(255,255,255,.76);
+    border:4px solid rgba(255,255,255,.9);
+    border-radius:30px;
+    box-shadow:var(--shadow);
+    display:none;
+    overflow:hidden;
+    position:relative;
+  }
+  .screen.active{display:block}
+  .topbar{
+    height:64px;display:flex;align-items:center;justify-content:space-between;
+    padding:10px 18px;background:rgba(255,255,255,.62);border-bottom:2px dashed rgba(0,0,0,.08)
+  }
+  .brand{font-weight:900;font-size:24px;letter-spacing:.03em}
+  .pill{border-radius:999px;background:#fff;padding:8px 14px;box-shadow:0 5px 12px rgba(0,0,0,.09);font-weight:800}
+  button{
+    font:inherit;border:0;border-radius:20px;padding:14px 18px;font-weight:900;
+    background:white;box-shadow:0 6px 0 #d8d0c4,0 12px 18px rgba(0,0,0,.13);
+    cursor:pointer;touch-action:manipulation;color:var(--ink)
+  }
+  button:active{transform:translateY(4px);box-shadow:0 2px 0 #d8d0c4,0 6px 12px rgba(0,0,0,.12)}
+  .primary{background:linear-gradient(#ffbd58,#ff8b3d);color:white;text-shadow:0 1px 0 rgba(0,0,0,.18)}
+  .blue{background:linear-gradient(#6aa8ff,#2e6fd8);color:white}
+  .green{background:linear-gradient(#52d69e,#22a977);color:white}
+  .red{background:linear-gradient(#ff7b7b,#df5b5b);color:white}
+  .title-wrap{height:100%;display:grid;grid-template-columns:1.15fr .85fr;gap:20px;padding:40px}
+  h1{font-size:clamp(44px,7vw,86px);margin:20px 0 10px;line-height:1.02}
+  .subtitle{font-size:clamp(18px,2.4vw,28px);font-weight:800;line-height:1.6}
+  .rabbit-stage{display:flex;align-items:center;justify-content:center;position:relative}
+  .rabbit-big{max-width:92%;max-height:86%;object-fit:contain;filter:drop-shadow(0 14px 22px rgba(0,0,0,.18))}
+  .start-buttons{display:flex;gap:16px;flex-wrap:wrap;margin-top:28px}
+  .main-grid{height:calc(100% - 64px);display:grid;grid-template-columns:1.08fr .92fr;gap:16px;padding:18px}
+  .card{background:var(--card);border-radius:26px;padding:18px;box-shadow:0 8px 20px rgba(0,0,0,.08);border:2px solid rgba(0,0,0,.04)}
+  .problem{display:flex;flex-direction:column;gap:14px}
+  .problem-title{font-size:23px;font-weight:900;color:#59432b}
+  .numbers{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:4px 0 8px
+  }
+  .num-card{
+    background:linear-gradient(#fff,#fff3d8);border:3px solid #f0c069;border-radius:24px;
+    min-height:112px;display:flex;align-items:center;justify-content:center;flex-direction:column;
+    font-weight:900;font-size:34px;box-shadow:inset 0 -5px 0 rgba(0,0,0,.04)
+  }
+  .num-card small{font-size:14px;color:#796855;margin-top:4px}
+  .question-box{background:#f7fbff;border:2px dashed #7aa8dd;border-radius:20px;padding:14px;font-weight:800;line-height:1.55;font-size:18px}
+  .hypotheses{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:auto}
+  .hypo{min-height:72px;font-size:18px;position:relative}
+  .hypo.locked{opacity:.35;filter:grayscale(1)}
+  .hypo.new::after{
+    content:"NEW";position:absolute;right:8px;top:-10px;background:#ff4f75;color:white;
+    border-radius:999px;padding:4px 8px;font-size:12px;animation:pop .7s infinite alternate
+  }
+  .side{display:flex;flex-direction:column;gap:12px}
+  .rabbit-card{flex:1;display:grid;grid-template-columns:46% 54%;gap:8px;align-items:center}
+  .rabbit{width:100%;height:100%;max-height:280px;object-fit:contain;filter:drop-shadow(0 9px 10px rgba(0,0,0,.18));transition:.25s}
+  .rabbit.bump{animation:bump .35s ease}
+  .speech{
+    background:white;border:4px solid #2b251f;border-radius:26px;padding:16px;position:relative;
+    font-weight:900;font-size:clamp(18px,2.5vw,26px);line-height:1.45;min-height:150px;display:flex;align-items:center
+  }
+  .speech:before{
+    content:"";position:absolute;left:-22px;top:50%;border-width:12px 22px 12px 0;border-style:solid;border-color:transparent #2b251f transparent transparent
+  }
+  .speech:after{
+    content:"";position:absolute;left:-15px;top:calc(50% + 3px);border-width:9px 17px 9px 0;border-style:solid;border-color:transparent white transparent transparent
+  }
+  .log{height:160px;overflow:auto;font-size:15px;line-height:1.5;background:#fff;border-radius:20px;padding:12px;border:2px solid #eee}
+  .log div{margin-bottom:6px}
+  .meter{height:18px;background:#eee;border-radius:999px;overflow:hidden;margin-top:7px}
+  .bar{height:100%;width:0%;background:linear-gradient(90deg,#7cc8ff,#ffbd58);transition:.35s}
+  .result-content{height:calc(100% - 64px);display:grid;grid-template-columns:.85fr 1.15fr;gap:18px;padding:22px}
+  .explain{font-size:20px;line-height:1.7;font-weight:700;overflow:auto}
+  .formula{background:#fff7dc;border-radius:18px;padding:14px;margin:10px 0;font-size:22px;font-weight:900;text-align:center}
+  .confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+  .piece{position:absolute;width:12px;height:18px;border-radius:4px;animation:fall 1.2s linear forwards}
+  @keyframes fall{to{transform:translateY(820px) rotate(720deg);opacity:.2}}
+  @keyframes bump{50%{transform:scale(1.08) rotate(-2deg)}}
+  @keyframes pop{to{transform:scale(1.12)}}
+  .shake{animation:shake .32s}
+  @keyframes shake{20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+  @media (max-width:820px){
+    .title-wrap,.main-grid,.result-content{grid-template-columns:1fr}
+    .screen{overflow:auto}
+    html,body{overflow:auto}
+    .app{height:auto;min-height:100dvh}
+    .hypotheses{grid-template-columns:1fr}
+    .rabbit-card{grid-template-columns:120px 1fr}
+    .numbers{grid-template-columns:1fr}
+  }
 </style>
 </head>
 <body>
 <div class="app">
-<section id="title" class="screen active"><div class="title-layout"><div><div class="pill" style="display:inline-block">青翔型・適性検査トレーニング</div><h1>仮説<br>ラビット</h1><div class="subtitle">共通点を見つける。<br>仮説を選ぶ。<br>3つの式で検証する。<br>使える見方だけを残す。</div><div class="start-buttons"><button class="primary" onclick="startApp()">トレーニング開始</button><button class="blue" onclick="showHow()">あそび方</button></div></div><div class="rabbit-stage"><img class="rabbit-big" src="images/rabbit27.png" onerror="this.src='images/rabbit01.png';this.onerror=null;" alt="うさぎ"></div></div></section>
-<section id="training" class="screen"><div class="topbar"><div class="brand">仮説ラビット：共通点を検証しよう</div><div class="pill">選択 <span id="selectedCount">0</span>個</div><div class="pill">使える仮説 <span id="usableCount">0</span>個</div></div><div class="main"><div class="left"><div class="card"><div class="problem-title">3つの式に共通しているものはどれ？</div><div class="numbers" style="margin-top:10px"><div class="num-card">33 × 37<small>式A</small></div><div class="num-card">42 × 48<small>式B</small></div><div class="num-card">76 × 74<small>式C</small></div></div></div><div class="instruction">下の候補から「共通していそう」と思うものを選んで、検証ボタンを押そう。<br>まちがってもOK。大事なのは「どこまで説明できるか」を見ること。</div><div id="choices" class="choices"></div><div class="actions"><button class="blue" onclick="clearSelections()">選び直す</button><button class="primary" onclick="verifySelections()">検証する</button></div></div><div class="right"><div class="card rabbit-card"><img id="rabbit" class="rabbit" src="images/rabbit57.png" onerror="this.src='images/rabbit01.png';this.onerror=null;" alt="うさぎ"><div id="speech" class="speech">まずは「共通していそう」と思うものを選んでみよう。</div></div><div class="card lab"><div class="lab-title">検証ラボ</div><div id="labBody" class="instruction">ここに検証結果が1つずつ出ます。</div><div id="nextArea" class="next-area"></div></div><div class="card"><b>思考ログ</b><div id="log" class="mini-log"></div></div></div></div><div id="confetti" class="confetti"></div></section>
-<section id="lesson" class="screen"><div class="topbar"><div class="brand">使える仮説を、計算の便利さにつなげよう</div><button onclick="startApp()">最初から</button></div><div class="lesson"><div class="card rabbit-stage"><img id="lessonRabbit" class="rabbit-big" src="images/rabbit44.png" onerror="this.src='images/rabbit10.png';this.onerror=null;" alt="うさぎ"></div><div class="lesson-panel"><div id="lessonStep" class="step-card"></div><div id="lessonFormula" class="formula"></div><div class="next-area"><button class="primary" onclick="nextLesson()">次へ</button><button class="blue" onclick="startApp()">もう一度トレーニング</button></div></div></div></section>
+  <section id="title" class="screen active">
+    <div class="title-wrap">
+      <div>
+        <div class="pill" style="display:inline-block">適性検査トレーニング</div>
+        <h1>仮説<br>ラビット</h1>
+        <div class="subtitle">正解をすぐ探さない。<br>「これかな？」を試して、見方を増やすWebアプリ。</div>
+        <div class="start-buttons">
+          <button class="primary" onclick="startTraining()">トレーニング開始</button>
+          <button class="blue" onclick="showHow()">あそび方</button>
+        </div>
+      </div>
+      <div class="rabbit-stage">
+        <img class="rabbit-big" src="images/rabbit27.png" onerror="this.src='images/rabbit01.png';this.onerror=null;" alt="うさぎ">
+      </div>
+    </div>
+  </section>
+
+  <section id="train" class="screen">
+    <div class="topbar">
+      <div class="brand">仮説ラビット</div>
+      <div class="pill">視点レベル <span id="level">1</span></div>
+      <div class="pill">仮説回数 <span id="tries">0</span></div>
+    </div>
+    <div class="main-grid">
+      <div class="card problem">
+        <div class="problem-title">問題：3つのかけ算に共通する「便利な見方」を探そう</div>
+        <div class="numbers">
+          <div class="num-card">33 × 37<small>計算せずに観察</small></div>
+          <div class="num-card">42 × 48<small>何が似ている？</small></div>
+          <div class="num-card">76 × 74<small>全部に当てはまる？</small></div>
+        </div>
+        <div class="question-box">
+          まずは仮説を選ぼう。うまくいかなくてもOK。<br>
+          失敗すると、新しい「見方」が解放される。
+        </div>
+        <div class="meter"><div id="bar" class="bar"></div></div>
+        <div id="hypotheses" class="hypotheses"></div>
+      </div>
+
+      <div class="side">
+        <div class="card rabbit-card">
+          <img id="rabbit" class="rabbit" src="images/rabbit57.png" onerror="this.src='images/rabbit01.png';this.onerror=null;" alt="うさぎ">
+          <div id="speech" class="speech">まずは2つだけ。どっちから見る？</div>
+        </div>
+        <div class="card">
+          <b>思考ログ</b>
+          <div id="log" class="log"></div>
+        </div>
+      </div>
+    </div>
+    <div id="confetti" class="confetti"></div>
+  </section>
+
+  <section id="result" class="screen">
+    <div class="topbar">
+      <div class="brand">そうか、これか！</div>
+      <button onclick="startTraining()">もう一回</button>
+    </div>
+    <div class="result-content">
+      <div class="card rabbit-stage">
+        <img class="rabbit-big" src="images/rabbit44.png" onerror="this.src='images/rabbit10.png';this.onerror=null;" alt="うさぎ">
+      </div>
+      <div class="card explain">
+        <h2>今回見つけた見方</h2>
+        <p>ポイントは、<b>十の位が同じ</b>で、<b>一の位を足すと10</b>になること。</p>
+        <div class="formula">33×37 = (30+3)(30+7)</div>
+        <p>3と7を足すと10なので、途中の部分をまとめやすくなります。</p>
+        <div class="formula">30×30 + 30×7 + 30×3 + 3×7<br>＝ 30×40 + 21<br>＝ 1221</div>
+        <p>大事なのは公式暗記ではなく、<b>「どこを見ればよいか」を試すこと</b>。仮説を何回も出すほど、次の問題への入り口が増えていきます。</p>
+        <button class="primary" onclick="startTraining()">もう一度トレーニング</button>
+      </div>
+    </div>
+  </section>
 </div>
+
 <script>
-const RABBIT={wait:"images/rabbit57.png",think:"images/rabbit60.png",miss:"images/rabbit49.png",hmm:"images/rabbit56.png",sparkle:"images/rabbit29.png",unlock:"images/rabbit27.png",wow:"images/rabbit39.png",correct:"images/rabbit44.png"};
-const candidates=[
-{id:"all_even",text:"3つとも偶数どうしのかけ算",good:false,checks:[["33×37","奇数×奇数","×"],["42×48","偶数×偶数","○"],["76×74","偶数×偶数","○"]],comment:"33×37が偶数どうしではないね。これは3つ全部の共通点にはならない。"},
-{id:"ones_sum10",text:"1けたの数字を足すと10になる",good:true,checks:[["33×37","3＋7＝10","○"],["42×48","2＋8＝10","○"],["76×74","6＋4＝10","○"]],comment:"これは3つ全部に当てはまる。使える仮説だね。"},
-{id:"same_tens",text:"10の位の数字が同じ",good:true,checks:[["33×37","3 と 3","○"],["42×48","4 と 4","○"],["76×74","7 と 7","○"]],comment:"これも3つ全部に当てはまる。かなり大事な仮説だね。"},
-{id:"tens_sum10",text:"10の位を足すと10になる",good:false,checks:[["33×37","3＋3＝6","×"],["42×48","4＋4＝8","×"],["76×74","7＋7＝14","×"]],comment:"10の位を足しても10にはならない。ここは共通点ではないね。"},
-{id:"diff_even",text:"2つの数の差が全部偶数",good:true,checks:[["33×37","37−33＝4","○"],["42×48","48−42＝6","○"],["76×74","76−74＝2","○"]],comment:"これは当てはまる。ただし、計算を楽にする中心条件ではなさそう。"},
-{id:"diff_same",text:"2つの数の差が全部同じ",good:false,checks:[["33×37","差は4","×"],["42×48","差は6","×"],["76×74","差は2","×"]],comment:"差は4、6、2でそろわない。これは共通点ではないね。"},
-{id:"include7",text:"どの式にも7が入っている",good:false,checks:[["33×37","37に7がある","○"],["42×48","7がない","×"],["76×74","76と74に7がある","○"]],comment:"42×48に7がない。これだと3つ全部は説明できないね。"},
-{id:"ones_even",text:"1けたの数字がどちらも偶数",good:false,checks:[["33×37","3と7は奇数","×"],["42×48","2と8は偶数","○"],["76×74","6と4は偶数","○"]],comment:"2つは合うけど、33×37が違う。共通点にはならない。"},
-{id:"two_digit",text:"どれも2けた×2けたの式",good:true,checks:[["33×37","2けた×2けた","○"],["42×48","2けた×2けた","○"],["76×74","2けた×2けた","○"]],comment:"これは確かに共通点。ただし、計算を楽にするにはもう少し深い仮説が必要。"},
-{id:"reverse",text:"左右を入れ替えると同じ数になる",good:false,checks:[["33×37","37×33とは同じだが、特徴ではない","×"],["42×48","48×42とは同じだが、特徴ではない","×"],["76×74","74×76とは同じだが、特徴ではない","×"]],comment:"かけ算は入れ替えても答えは同じだけど、今回の3つの式の特徴ではないね。"}
+const IMG = {
+  wait:"images/rabbit57.png",
+  hmm:"images/rabbit56.png",
+  miss:"images/rabbit49.png",
+  miss2:"images/rabbit21.png",
+  unlock:"images/rabbit27.png",
+  sparkle:"images/rabbit29.png",
+  correct:"images/rabbit44.png",
+  wow:"images/rabbit39.png"
+};
+
+const allHypotheses = [
+  {id:"even", text:"偶数・奇数に注目？", ok:false, msg:"う〜ん、偶数だけでは3つを説明しきれないね。別の見方を増やそう。", img:"miss"},
+  {id:"ones", text:"一の位に注目？", ok:false, msg:"いい入口！でも一の位だけだと、まだ法則までは届かない。もう少し広げよう。", img:"hmm"},
+  {id:"tens", text:"十の位に注目？", ok:false, msg:"かなり近い！十の位には共通点がある。でも、それだけではまだ足りない。", img:"sparkle"},
+  {id:"sum", text:"一の位を足す？", ok:false, msg:"おっ、見えてきた！全部、一の位を足すと10になるね。あともう一つ条件がいる。", img:"unlock"},
+  {id:"difference", text:"2つの数の差を見る？", ok:false, msg:"差を見るのも良い仮説。でも今回は差が4、6、2でそろわないね。", img:"miss2"},
+  {id:"both", text:"十の位＋一の位の和？", ok:true, msg:"そうかこれか！十の位が同じで、一の位を足すと10。これが便利な見方だ！", img:"correct"},
+  {id:"area", text:"面積図にできる？", ok:true, msg:"大正解！面積図にすると、なぜこの法則が成り立つか説明できる！", img:"wow"}
 ];
-const lessonSteps=[
-{rabbit:"sparkle",text:"使える仮説が見つかったね。特に大事なのはこの2つ。",formula:"① 10の位が同じ　② 1けたの数字を足すと10"},
-{rabbit:"think",text:"33×37で考えてみよう。33は30＋3、37は30＋7に分けられる。",formula:"33×37 ＝ (30＋3)×(30＋7)"},
-{rabbit:"hmm",text:"展開すると、30×7 と 30×3 が出てくる。でも別々に計算しなくてもいい。",formula:"30×7 ＋ 30×3"},
-{rabbit:"sparkle",text:"どちらにも30がある。だから30を1回だけ使って、まとめて考えられる。",formula:"30×7 ＋ 30×3 ＝ 30×(7＋3)"},
-{rabbit:"wow",text:"ここで、1けたの数字を足すと10だったことが効いてくる。",formula:"30×(7＋3) ＝ 30×10"},
-{rabbit:"correct",text:"30×10は10倍するだけ。つまり暗算しやすい。仮説は『計算を楽にする道具』になるんだ。",formula:"30×10 ＝ 300"},
-{rabbit:"correct",text:"最後に全体を見ると、30×30と3×7も合わせて答えになる。",formula:"30×30 ＋ 30×10 ＋ 3×7 ＝ 900＋300＋21＝1221"}
-];
-let selected=new Set(),verifiedGood=new Set(),lessonIndex=0,audioCtx=null;
-function $(id){return document.getElementById(id)}function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));$(id).classList.add("active")}function setRabbit(key){const img=$("rabbit");if(!img)return;img.src=RABBIT[key]||RABBIT.wait;img.classList.remove("bump");void img.offsetWidth;img.classList.add("bump")}function setSpeech(t){$("speech").textContent=t}function log(t){const d=document.createElement("div");d.textContent="・"+t;$("log").prepend(d)}
-function beep(type="tap"){try{if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);const now=audioCtx.currentTime;if(type==="ok"){o.frequency.setValueAtTime(660,now);o.frequency.exponentialRampToValueAtTime(990,now+.12);g.gain.setValueAtTime(.08,now);g.gain.exponentialRampToValueAtTime(.001,now+.22);o.stop(now+.24)}else if(type==="new"){o.frequency.setValueAtTime(420,now);o.frequency.exponentialRampToValueAtTime(780,now+.10);g.gain.setValueAtTime(.06,now);g.gain.exponentialRampToValueAtTime(.001,now+.18);o.stop(now+.2)}else{o.frequency.setValueAtTime(180,now);o.frequency.exponentialRampToValueAtTime(120,now+.12);g.gain.setValueAtTime(.05,now);g.gain.exponentialRampToValueAtTime(.001,now+.16);o.stop(now+.18)}o.start(now)}catch(e){}}
-function startApp(){selected=new Set();verifiedGood=new Set();$("selectedCount").textContent="0";$("usableCount").textContent="0";$("labBody").innerHTML='<div class="instruction">ここに検証結果が1つずつ出ます。</div>';$("nextArea").innerHTML="";$("log").innerHTML="";setRabbit("wait");setSpeech("まずは『共通していそう』と思うものを選んでみよう。");renderChoices();show("training")}
-function renderChoices(){const box=$("choices");box.innerHTML="";candidates.forEach(c=>{const b=document.createElement("button");b.className="choice";if(selected.has(c.id))b.classList.add("selected");if(verifiedGood.has(c.id))b.classList.add("usable");b.textContent=c.text;b.onclick=()=>{if(selected.has(c.id))selected.delete(c.id);else selected.add(c.id);$("selectedCount").textContent=selected.size;renderChoices();beep("tap")};box.appendChild(b)})}
-function clearSelections(){selected=new Set();$("selectedCount").textContent="0";renderChoices();setRabbit("wait");setSpeech("選び直したね。今度はどの見方でいく？")}
-function verifySelections(){if(selected.size===0){setRabbit("miss");setSpeech("まずは1つ以上、仮説を選んでみよう。");return}$("labBody").innerHTML="";$("nextArea").innerHTML="";setRabbit("think");setSpeech("選んだ仮説を、3つの式に当てはめて検証するよ。");const arr=candidates.filter(c=>selected.has(c.id));arr.forEach((c,i)=>setTimeout(()=>renderHypothesis(c),i*1900));setTimeout(()=>{const mainGood=verifiedGood.has("ones_sum10")&&verifiedGood.has("same_tens");if(mainGood){setRabbit("correct");setSpeech("大事な2つがそろった！次は『なぜ計算が楽になるのか』を見よう。");$("nextArea").innerHTML='<button class="primary" onclick="startLesson()">展開図への流れを見る</button>';confetti()}else{setRabbit("unlock");setSpeech("検証できたね。次は『10の位が同じ』『1けたの和が10』を見つけたい。もう一度選んでみよう。");$("nextArea").innerHTML='<button class="green" onclick="keepTrying()">もう一度、仮説を選ぶ</button>'}},arr.length*1900+250)}
-function renderHypothesis(c){const card=document.createElement("div");card.className="hypo-card";const okCount=c.checks.filter(x=>x[2]==="○").length;const allOk=okCount===3;if(allOk)verifiedGood.add(c.id);const badgeClass=allOk?"good":"bad";const badgeText=allOk?"3/3 成立":okCount+"/3";let html=`<div class="hypo-head"><div>${c.text}</div><div class="badge ${badgeClass}">${badgeText}</div></div>`;c.checks.forEach(row=>{const cls=row[2]==="○"?"ok":"ng";html+=`<div class="check-row"><div>${row[0]}</div><div>${row[1]}</div><div class="mark ${cls}">${row[2]}</div></div>`});html+=`<div class="${allOk?'useful-box':'instruction'}">${c.comment}</div>`;card.innerHTML=html;$("labBody").appendChild(card);$("usableCount").textContent=verifiedGood.size;renderChoices();log(`${c.text} → ${badgeText}`);setRabbit(allOk?"sparkle":"hmm");setSpeech(allOk?"これは3つ全部に当てはまる。使える仮説だね。":"これだと3つ全部は説明しきれないね。");beep(allOk?"ok":"tap")}
-function keepTrying(){selected=new Set();$("selectedCount").textContent="0";$("nextArea").innerHTML="";renderChoices();setSpeech("もう一度、共通していそうなものを選んでみよう。");setRabbit("wait")}
-function startLesson(){lessonIndex=0;renderLesson();show("lesson")}function renderLesson(){const step=lessonSteps[lessonIndex];$("lessonStep").innerHTML=step.text;$("lessonFormula").innerHTML=step.formula;$("lessonRabbit").src=RABBIT[step.rabbit]||RABBIT.correct;beep(lessonIndex>=4?"ok":"new")}function nextLesson(){lessonIndex++;if(lessonIndex>=lessonSteps.length){lessonIndex=lessonSteps.length-1;confetti();alert("トレーニング完了！次は実践モードで使えるか試そう。");return}renderLesson()}
-function confetti(){const box=$("confetti");box.innerHTML="";const colors=["#ff8b3d","#2e6fd8","#21a67a","#ff4f75","#ffd24d"];for(let i=0;i<70;i++){const p=document.createElement("div");p.className="piece";p.style.left=Math.random()*100+"%";p.style.top="-30px";p.style.background=colors[i%colors.length];p.style.animationDelay=(Math.random()*.35)+"s";p.style.transform=`rotate(${Math.random()*180}deg)`;box.appendChild(p)}}
-function showHow(){alert("① 共通していそうな候補を選ぶ\n② 検証ボタンを押す\n③ 3つの式で○×を見る\n④ 使える仮説を残す\n⑤ その仮説がなぜ計算を楽にするか見る\n\n目的は、青翔型の『仮説→検証→再仮説』の思考を身につけることです。")}
+
+let unlocked = 2;
+let tries = 0;
+let used = new Set();
+let audioCtx = null;
+
+function $(id){return document.getElementById(id)}
+function show(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  $(id).classList.add("active");
+}
+function setRabbit(key){
+  const r = $("rabbit");
+  r.src = IMG[key] || IMG.wait;
+  r.classList.remove("bump");
+  void r.offsetWidth;
+  r.classList.add("bump");
+}
+function speak(text){ $("speech").textContent = text; }
+function log(text){
+  const div=document.createElement("div");
+  div.textContent="・"+text;
+  $("log").prepend(div);
+}
+function beep(type="tap"){
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    const now = audioCtx.currentTime;
+    if(type==="ok"){
+      o.frequency.setValueAtTime(660,now);
+      o.frequency.exponentialRampToValueAtTime(990,now+.12);
+      g.gain.setValueAtTime(.08,now);
+      g.gain.exponentialRampToValueAtTime(.001,now+.22);
+      o.stop(now+.24);
+    }else if(type==="new"){
+      o.frequency.setValueAtTime(420,now);
+      o.frequency.exponentialRampToValueAtTime(780,now+.1);
+      g.gain.setValueAtTime(.06,now);
+      g.gain.exponentialRampToValueAtTime(.001,now+.18);
+      o.stop(now+.2);
+    }else{
+      o.frequency.setValueAtTime(180,now);
+      o.frequency.exponentialRampToValueAtTime(120,now+.12);
+      g.gain.setValueAtTime(.05,now);
+      g.gain.exponentialRampToValueAtTime(.001,now+.16);
+      o.stop(now+.18);
+    }
+    o.start(now);
+  }catch(e){}
+}
+function startTraining(){
+  unlocked = 2; tries = 0; used = new Set();
+  $("log").innerHTML="";
+  $("tries").textContent=0;
+  $("level").textContent=1;
+  $("bar").style.width="0%";
+  setRabbit("wait");
+  speak("まずは2つだけ。どっちから見る？");
+  renderButtons();
+  show("train");
+}
+function renderButtons(){
+  const box=$("hypotheses"); box.innerHTML="";
+  allHypotheses.forEach((h,i)=>{
+    if(i<unlocked){
+      const b=document.createElement("button");
+      b.className="hypo " + (i>=unlocked-3 && unlocked>2 && !used.has(h.id) ? "new":"");
+      b.textContent=h.text;
+      b.onclick=()=>choose(h);
+      box.appendChild(b);
+    }
+  });
+}
+function choose(h){
+  tries++;
+  used.add(h.id);
+  $("tries").textContent=tries;
+  setRabbit(h.img);
+  speak(h.msg);
+  log(h.text+" → "+(h.ok?"発見！":"まだ説明しきれない"));
+  if(h.ok){
+    beep("ok");
+    $("bar").style.width="100%";
+    confetti();
+    setTimeout(()=>show("result"),1300);
+    return;
+  }
+  beep("tap");
+  $("train").classList.remove("shake");
+  void $("train").offsetWidth;
+  $("train").classList.add("shake");
+  if(unlocked < allHypotheses.length){
+    setTimeout(()=>{
+      const before = unlocked;
+      unlocked = Math.min(allHypotheses.length, unlocked + 3);
+      $("level").textContent=Math.ceil(unlocked/2);
+      $("bar").style.width=Math.min(90, unlocked/allHypotheses.length*100)+"%";
+      renderButtons();
+      setRabbit("unlock");
+      speak("新しい見方が増えた！次はどこを見る？");
+      log("新しい仮説ボタンが解放された");
+      beep("new");
+    },800);
+  }
+}
+function confetti(){
+  const box=$("confetti");
+  box.innerHTML="";
+  const colors=["#ff8b3d","#2e6fd8","#21a67a","#ff4f75","#ffd24d"];
+  for(let i=0;i<70;i++){
+    const p=document.createElement("div");
+    p.className="piece";
+    p.style.left=Math.random()*100+"%";
+    p.style.top="-30px";
+    p.style.background=colors[i%colors.length];
+    p.style.animationDelay=(Math.random()*.35)+"s";
+    p.style.transform=`rotate(${Math.random()*180}deg)`;
+    box.appendChild(p);
+  }
+}
+function showHow(){
+  alert("① 仮説ボタンを押す\\n② うまくいかないと新しい見方が増える\\n③ 正解よりも『見方を増やす』ことが目的です");
+}
 </script>
 </body>
 </html>
