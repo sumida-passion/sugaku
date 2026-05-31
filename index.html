@@ -2,284 +2,411 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>仮説ラビット｜トレーニング</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>仮説ラビット</title>
 <style>
-:root{--bg1:#fff8df;--bg2:#e9f7ff;--ink:#2b251f;--orange:#ff8b3d;--blue:#2e6fd8;--green:#21a67a;--red:#df5b5b;--card:#fffefa;--shadow:0 12px 26px rgba(49,38,17,.17)}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",Meiryo,sans-serif;color:var(--ink);overflow:hidden}
-body{background:linear-gradient(135deg,var(--bg1),var(--bg2))}
-button{font:inherit;border:0;border-radius:18px;padding:12px 14px;font-weight:900;color:var(--ink);background:white;box-shadow:0 5px 0 #d8d0c4,0 10px 14px rgba(0,0,0,.12);cursor:pointer}
-button:active{transform:translateY(3px);box-shadow:0 2px 0 #d8d0c4}
-.primary{background:linear-gradient(#ffbd58,#ff8b3d);color:white}.blue{background:linear-gradient(#73aeff,#2e6fd8);color:white}.green{background:linear-gradient(#55d99f,#21a67a);color:white}
-.app{height:100dvh;display:flex;align-items:center;justify-content:center;padding:12px}
-.screen{display:none;width:min(1180px,100%);height:min(760px,100%);background:rgba(255,255,255,.82);border-radius:30px;box-shadow:var(--shadow);overflow:hidden;border:4px solid rgba(255,255,255,.9)}
-.screen.active{display:block}
-.topbar{height:60px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 16px;background:rgba(255,255,255,.7);border-bottom:2px dashed rgba(0,0,0,.08)}
-.brand{font-size:22px;font-weight:950}.pill{background:white;border-radius:999px;padding:7px 12px;font-weight:900;box-shadow:0 4px 10px rgba(0,0,0,.09)}
-.title{height:100%;display:grid;grid-template-columns:1.1fr .9fr;gap:15px;padding:38px}
-h1{font-size:clamp(48px,7vw,84px);line-height:1.02;margin:16px 0}.lead{font-size:clamp(19px,2.4vw,28px);font-weight:900;line-height:1.55}
-.rabbit-big{max-width:92%;max-height:86%;object-fit:contain;filter:drop-shadow(0 14px 22px rgba(0,0,0,.18))}
-.rabbit-stage{display:flex;align-items:center;justify-content:center}.start-buttons{display:flex;gap:14px;flex-wrap:wrap;margin-top:24px}
-.menu{height:calc(100% - 60px);padding:18px;display:grid;grid-template-columns:repeat(2,1fr);gap:14px;overflow:auto}
-.menu-card{background:white;border-radius:24px;padding:18px;box-shadow:0 8px 18px rgba(0,0,0,.08);border:3px solid #f0c069;display:flex;flex-direction:column;gap:10px}
-.menu-card h2{margin:0;font-size:23px}.menu-card p{margin:0;font-weight:800;line-height:1.5}
-.main{height:calc(100% - 60px);display:grid;grid-template-columns:1.02fr .98fr;gap:12px;padding:12px}
-.card{background:var(--card);border-radius:24px;padding:14px;box-shadow:0 8px 18px rgba(0,0,0,.08);border:2px solid rgba(0,0,0,.04)}
-.left,.right{display:flex;flex-direction:column;gap:10px;min-height:0}
-.problem-title{font-size:20px;font-weight:950;color:#59432b}
-.numbers{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:8px}
-.num{min-height:82px;border:3px solid #f0c069;border-radius:20px;background:linear-gradient(#fff,#fff3d8);display:flex;align-items:center;justify-content:center;text-align:center;font-size:27px;font-weight:950;line-height:1.25}
-.instruction{background:#f7fbff;border:2px dashed #7aa8dd;border-radius:17px;padding:10px 12px;font-weight:850;line-height:1.45;font-size:15px}
-.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;overflow:auto}
-.choice{text-align:left;min-height:50px;font-size:15px;border:3px solid transparent}
-.choice.selected{border-color:var(--orange);background:#fff4d2}.choice.good{border-color:var(--green);background:#eafff5}
-.actions{display:flex;gap:10px;margin-top:auto}.actions button{flex:1}
-.rabbit-card{height:205px;display:grid;grid-template-columns:38% 62%;gap:8px;align-items:center}
-.rabbit{width:100%;height:100%;max-height:185px;object-fit:contain;filter:drop-shadow(0 9px 10px rgba(0,0,0,.18))}
-.rabbit.bump{animation:bump .32s ease}
-.speech{min-height:122px;display:flex;align-items:center;background:white;border:4px solid var(--ink);border-radius:24px;padding:13px;font-size:clamp(17px,2vw,22px);font-weight:950;line-height:1.42}
-.lab{flex:1;overflow:auto;min-height:0}
-.hypo{background:#fff;border-radius:18px;border:2px solid #eee;padding:10px;margin-bottom:10px}
-.hypo-head{display:flex;justify-content:space-between;gap:8px;align-items:center;font-weight:950;margin-bottom:7px}
-.badge{border-radius:999px;padding:5px 10px;font-size:13px;color:white;white-space:nowrap}.badge.good{background:var(--green)}.badge.bad{background:var(--red)}
-.row{display:grid;grid-template-columns:92px 1fr 36px;gap:7px;align-items:center;padding:7px;margin:5px 0;background:#fffaf1;border-radius:13px;font-size:14px;font-weight:850}
-.mark{font-size:24px;font-weight:950;text-align:center}.ok{color:var(--green)}.ng{color:var(--red)}
-.summary-good{background:#eafff5;border:2px solid #8ee4bd;border-radius:16px;padding:10px;font-weight:900;line-height:1.45;margin-top:8px}
-.summary-bad{background:#fff0f0;border:2px solid #ffabab;border-radius:16px;padding:10px;font-weight:900;line-height:1.45;margin-top:8px}
-.lesson{height:calc(100% - 60px);display:grid;grid-template-columns:.9fr 1.1fr;gap:14px;padding:16px}
-.step{font-size:21px;font-weight:900;line-height:1.65;overflow:auto}
-.formula{background:#fff7dc;border-radius:18px;padding:14px;margin:12px 0;text-align:center;font-size:24px;font-weight:950;line-height:1.6;white-space:pre-line}
-@keyframes bump{50%{transform:scale(1.08) rotate(-2deg)}}
-@media(max-width:820px){html,body{overflow:auto}.app{height:auto;min-height:100dvh}.screen{height:auto;min-height:760px;overflow:auto}.title,.main,.lesson,.menu{grid-template-columns:1fr}.choices,.numbers{grid-template-columns:1fr}.rabbit-card{height:auto;grid-template-columns:120px 1fr}}
+:root{
+--bg1:#fff8df;--bg2:#e9f7ff;--ink:#2b251f;--orange:#ff8b3d;
+--green:#21a67a;--card:#fffefa;
+}
+*{box-sizing:border-box}
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+background:linear-gradient(135deg,var(--bg1),var(--bg2));
+color:var(--ink);
+}
+.wrap{
+max-width:1200px;
+margin:auto;
+padding:16px;
+}
+.card{
+background:white;
+border-radius:24px;
+padding:18px;
+margin-bottom:16px;
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+h1{
+font-size:48px;
+margin:0 0 10px;
+}
+.subtitle{
+font-size:20px;
+font-weight:900;
+line-height:1.6;
+}
+.problem{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:12px;
+margin-top:16px;
+}
+.box{
+background:#fff7dc;
+border:3px solid #f0c069;
+border-radius:20px;
+padding:20px;
+text-align:center;
+font-size:32px;
+font-weight:900;
+}
+button{
+border:0;
+border-radius:18px;
+padding:14px 18px;
+font-size:18px;
+font-weight:900;
+cursor:pointer;
+background:linear-gradient(#ffbd58,#ff8b3d);
+color:white;
+box-shadow:0 5px 0 #d37a33;
+}
+.choice-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+margin-top:14px;
+}
+.choice{
+background:white;
+color:#222;
+box-shadow:none;
+border:3px solid #ddd;
+}
+.choice.selected{
+border-color:#ff8b3d;
+background:#fff1d8;
+}
+.result{
+margin-top:14px;
+font-size:18px;
+line-height:1.7;
+font-weight:800;
+}
+.good{
+background:#eafff5;
+border:2px solid #90e5bf;
+padding:12px;
+border-radius:16px;
+margin-top:10px;
+}
+.bad{
+background:#fff0f0;
+border:2px solid #ffb0b0;
+padding:12px;
+border-radius:16px;
+margin-top:10px;
+}
+.flow{
+display:none;
+}
+.flow.active{
+display:block;
+}
+.step{
+background:#fffaf1;
+border-radius:20px;
+padding:18px;
+margin-top:12px;
+font-size:28px;
+font-weight:900;
+line-height:1.8;
+text-align:center;
+}
+.arrow-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+margin-top:18px;
+}
+.arrow-card{
+background:#f8fbff;
+border:3px dashed #7aa8dd;
+border-radius:20px;
+padding:16px;
+font-size:24px;
+font-weight:900;
+line-height:1.7;
+}
+.rabbit{
+width:220px;
+display:block;
+margin:auto;
+}
+.small{
+font-size:18px;
+}
+.highlight{
+color:#ff6a00;
+}
 </style>
 </head>
 <body>
-<div class="app">
+<div class="wrap">
 
-<section id="title" class="screen active">
-  <div class="title">
-    <div>
-      <div class="pill" style="display:inline-block">適性検査トレーニング</div>
-      <h1>仮説<br>ラビット</h1>
-      <div class="lead">仮説を選ぶ。<br>3つで検証する。<br>使える見方を残す。</div>
-      <div class="start-buttons">
-        <button class="primary" onclick="showMenu()">トレーニング開始</button>
-        <button class="blue" onclick="location.href='index2.html'">実践モードへ</button>
-      </div>
-    </div>
-    <div class="rabbit-stage"><img class="rabbit-big" src="images/rabbit27.png" onerror="this.src='images/rabbit01.png';this.onerror=null;"></div>
-  </div>
-</section>
+<div class="card">
+<h1>仮説ラビット</h1>
+<div class="subtitle">
+共通点を見つける<br>
+↓<br>
+「なんか使えそう」を最後の答えまでつなげる
+</div>
 
-<section id="menu" class="screen">
-  <div class="topbar"><div class="brand">トレーニングを選ぶ</div><button onclick="show('title')">戻る</button></div>
-  <div id="menuList" class="menu"></div>
-</section>
+<div class="problem">
+<div class="box">33 × 37</div>
+<div class="box">42 × 48</div>
+<div class="box">76 × 74</div>
+</div>
+</div>
 
-<section id="train" class="screen">
-  <div class="topbar">
-    <div class="brand" id="trainBrand">仮説ラビット</div>
-    <div class="pill">選択 <span id="selCount">0</span>個</div>
-    <div class="pill">使える仮説 <span id="goodCount">0</span>個</div>
-  </div>
-  <div class="main">
-    <div class="left">
-      <div class="card">
-        <div class="problem-title" id="problemTitle"></div>
-        <div id="numbers" class="numbers"></div>
-      </div>
-      <div class="instruction" id="instruction"></div>
-      <div id="choices" class="choices"></div>
-      <div class="actions">
-        <button class="blue" onclick="resetSelect()">選び直す</button>
-        <button class="primary" onclick="verify()">検証する</button>
-      </div>
-    </div>
-    <div class="right">
-      <div class="card rabbit-card">
-        <img id="rabbit" class="rabbit" src="images/rabbit57.png" onerror="this.src='images/rabbit01.png';this.onerror=null;">
-        <div id="speech" class="speech">共通していそうな仮説を選んでみよう。</div>
-      </div>
-      <div class="card lab">
-        <b>検証ラボ</b>
-        <div id="labBody" class="instruction" style="margin-top:8px"></div>
-        <div id="nextArea" style="margin-top:10px"></div>
-      </div>
-    </div>
-  </div>
-</section>
+<div class="card">
+<h2>3つに共通するものは？</h2>
 
-<section id="lesson" class="screen">
-  <div class="topbar">
-    <div class="brand" id="lessonBrand">使える仮説をつなげる</div>
-    <button onclick="showMenu()">メニューへ</button>
-  </div>
-  <div class="lesson">
-    <div class="card rabbit-stage"><img id="lessonRabbit" class="rabbit-big" src="images/rabbit44.png" onerror="this.src='images/rabbit10.png';this.onerror=null;"></div>
-    <div class="card step">
-      <div id="lessonText"></div>
-      <div id="lessonFormula" class="formula"></div>
-      <button class="primary" onclick="nextLesson()">次へ</button>
-    </div>
-  </div>
-</section>
+<div class="choice-grid" id="choices"></div>
+
+<button onclick="check()">検証する</button>
+
+<div id="result" class="result"></div>
+
+<div id="nextArea"></div>
+</div>
+
+<div id="flow" class="card flow">
+<img class="rabbit" src="images/rabbit44.png" onerror="this.style.display='none'">
+
+<div id="stepArea"></div>
+
+<div style="margin-top:18px;text-align:center">
+<button onclick="nextStep()">次へ</button>
+</div>
+</div>
 
 </div>
 
 <script>
-const R={wait:"images/rabbit57.png",think:"images/rabbit60.png",hmm:"images/rabbit56.png",miss:"images/rabbit49.png",spark:"images/rabbit29.png",ok:"images/rabbit44.png",wow:"images/rabbit39.png"};
-
-const trainings=[
+const data = [
 {
- title:"かけ算の共通点①",
- desc:"33×37型。10の位が同じ、一の位の和が10を見つける。",
- nums:["33 × 37","42 × 48","76 × 74"],
- instruction:"候補は10個。ダミーもあります。「これかな？」と思うものを複数選んで、検証しよう。",
- choices:[
-  {id:"all_even",text:"3つとも偶数どうしのかけ算",core:false,checks:[["33×37","奇数×奇数","×"],["42×48","偶数×偶数","○"],["76×74","偶数×偶数","○"]],bad:"33×37が偶数どうしではない。これだと3つに共通とは言えないね。"},
-  {id:"ones_sum10",text:"1けたの数字を足すと10になる",core:true,checks:[["33×37","03＋07＝10","○"],["42×48","02＋08＝10","○"],["76×74","06＋04＝10","○"]],good:"これは3つ全部に当てはまる。使える仮説だね。"},
-  {id:"same_tens",text:"10の位の数字が同じ",core:true,checks:[["33×37","3 と 3","○"],["42×48","4 と 4","○"],["76×74","7 と 7","○"]],good:"これも3つ全部に当てはまる。大事な仮説だね。"},
-  {id:"tens_sum10",text:"10の位を足すと10になる",core:false,checks:[["33×37","3＋3＝6","×"],["42×48","4＋4＝8","×"],["76×74","7＋7＝14","×"]],bad:"10の位を足しても10にはならない。"},
-  {id:"diff_even",text:"2つの数の差が全部偶数",core:false,usable:true,checks:[["33×37","37−33＝4","○"],["42×48","48−42＝6","○"],["76×74","76−74＝2","○"]],good:"これは確かに共通。ただし、計算を楽にする中心条件ではなさそう。"},
-  {id:"diff_same",text:"2つの数の差が全部同じ",core:false,checks:[["33×37","差は4","×"],["42×48","差は6","×"],["76×74","差は2","×"]],bad:"差はそろっていない。"},
-  {id:"include7",text:"どの式にも7が入っている",core:false,checks:[["33×37","37に7","○"],["42×48","7がない","×"],["76×74","76と74に7","○"]],bad:"42×48に7がないね。"},
-  {id:"ones_even",text:"1けたの数字がどちらも偶数",core:false,checks:[["33×37","3と7は奇数","×"],["42×48","2と8は偶数","○"],["76×74","6と4は偶数","○"]],bad:"33×37が当てはまらない。"},
-  {id:"two_digit",text:"どれも2けた×2けたの式",core:false,usable:true,checks:[["33×37","2けた×2けた","○"],["42×48","2けた×2けた","○"],["76×74","2けた×2けた","○"]],good:"これは共通。ただし、計算の工夫にはまだつながりにくい。"},
-  {id:"same_answer",text:"3つとも答えが同じ",core:false,checks:[["33×37","1221","×"],["42×48","2016","×"],["76×74","5624","×"]],bad:"答えは同じではないね。"}
- ],
- required:["ones_sum10","same_tens"],
- lessons:[
-  ["spark","使える中心仮説はこの2つ。","① 10の位が同じ　② 1けたの数字を足すと10"],
-  ["think","33×37で見てみよう。33は30＋3、37は30＋7に分けられる。","33×37＝(30＋3)×(30＋7)"],
-  ["hmm","展開すると、30×7 と 30×3 が出てくる。でも、別々に計算しなくていい。","30×7 ＋ 30×3"],
-  ["spark","どちらにも30がある。だから30を1回だけ使ってまとめられる。","30×7＋30×3＝30×(7＋3)"],
-  ["wow","ここで『1けたの数字を足すと10』が効く。次へを押す前に、声に出して答えてみよう。","30×(7＋3)=30×10"],
-  ["ok","30×10は10倍するだけ。暗算しやすい。","30×10＝300"],
-  ["think","42×48でも同じように言えるかな。次へを押す前に、声に出して考えてみよう。","40×8＋40×2＝40×(8＋2)=40×10"],
-  ["ok","76×74も同じ。70をまとめると、70×10になる。","70×6＋70×4＝70×(6＋4)=70×10"],
-  ["ok","仮説は、ただの共通点ではなく、計算を楽にする道具になる。","10の位が同じ ＋ 1けたの和が10 → まとめられる"]
- ]
+id:"ones10",
+text:"1けたの数字を足すと10",
+good:true,
+rows:[
+["33×37","3+7=10","○"],
+["42×48","2+8=10","○"],
+["76×74","6+4=10","○"]
+]
 },
 {
- title:"かけ算の共通点②",
- desc:"51×59型。同じ考えを別の数字で確認する。",
- nums:["51 × 59","64 × 66","82 × 88"],
- instruction:"1問目と同じ見方が使えるかな。共通していそうなものを選ぼう。",
- choices:[
-  {id:"same_tens",text:"10の位の数字が同じ",core:true,checks:[["51×59","5と5","○"],["64×66","6と6","○"],["82×88","8と8","○"]],good:"10の位が同じ。使える。"},
-  {id:"ones_sum10",text:"1けたの数字を足すと10",core:true,checks:[["51×59","1＋9＝10","○"],["64×66","4＋6＝10","○"],["82×88","2＋8＝10","○"]],good:"一の位の和が10。使える。"},
-  {id:"all_odd",text:"3つとも奇数どうし",core:false,checks:[["51×59","奇数×奇数","○"],["64×66","偶数×偶数","×"],["82×88","偶数×偶数","×"]],bad:"64×66と82×88が違う。"},
-  {id:"include6",text:"どの式にも6が入る",core:false,checks:[["51×59","6がない","×"],["64×66","6がある","○"],["82×88","6がない","×"]],bad:"全部には入っていない。"},
-  {id:"diff8",text:"差が全部8",core:false,checks:[["51×59","差8","○"],["64×66","差2","×"],["82×88","差6","×"]],bad:"差はそろわない。"},
-  {id:"two_digit",text:"2けた×2けた",core:false,usable:true,checks:[["51×59","2けた","○"],["64×66","2けた","○"],["82×88","2けた","○"]],good:"これは共通。ただし中心条件ではない。"},
-  {id:"tens_sum10",text:"10の位を足すと10",core:false,checks:[["51×59","5＋5＝10","○"],["64×66","6＋6＝12","×"],["82×88","8＋8＝16","×"]],bad:"全部は10にならない。"},
-  {id:"ones_same",text:"1けたの数字が同じ",core:false,checks:[["51×59","1と9","×"],["64×66","4と6","×"],["82×88","2と8","×"]],bad:"一の位は同じではない。"}
- ],
- required:["same_tens","ones_sum10"],
- lessons:[
-  ["spark","同じ型が見つかった。","10の位が同じ ＋ 1けたの和が10"],
-  ["think","51×59で考える。","51×59=(50＋1)×(50＋9)"],
-  ["spark","50×9と50×1をまとめる。","50×9＋50×1＝50×(9＋1)"],
-  ["wow","9＋1＝10だから簡単になる。","50×10＝500"],
-  ["think","64×66も声に出してから次へ。","60×6＋60×4＝60×(6＋4)=60×10"],
-  ["ok","82×88も同じ。","80×8＋80×2＝80×10"],
-  ["ok","数字が変わっても、見方が同じなら使える。","型を見つける＝実践で使える"]
- ]
+id:"same10",
+text:"10の位が同じ",
+good:true,
+rows:[
+["33×37","3と3","○"],
+["42×48","4と4","○"],
+["76×74","7と7","○"]
+]
 },
 {
- title:"数列の共通点",
- desc:"数の並びから、増え方と倍率を見つける。",
- nums:["12, 24, 36","15, 30, 45","18, 36, 54"],
- instruction:"計算式ではなく、数の並び。どんな見方が3つに共通するかな。",
- choices:[
-  {id:"plus_same",text:"同じ数ずつ増えている",core:true,checks:[["12,24,36","+12,+12","○"],["15,30,45","+15,+15","○"],["18,36,54","+18,+18","○"]],good:"増え方が一定。使える見方。"},
-  {id:"times123",text:"もとの数の1倍・2倍・3倍",core:true,checks:[["12,24,36","12×1,×2,×3","○"],["15,30,45","15×1,×2,×3","○"],["18,36,54","18×1,×2,×3","○"]],good:"倍率で見るときれいに説明できる。"},
-  {id:"all_even",text:"全部偶数",core:false,checks:[["12,24,36","偶数","○"],["15,30,45","奇数あり","×"],["18,36,54","偶数","○"]],bad:"15,30,45が全部偶数ではない。"},
-  {id:"plus10",text:"10ずつ増えている",core:false,checks:[["12,24,36","+12","×"],["15,30,45","+15","×"],["18,36,54","+18","×"]],bad:"10ずつではない。"},
-  {id:"three_nums",text:"3つの数が並んでいる",core:false,usable:true,checks:[["12,24,36","3つ","○"],["15,30,45","3つ","○"],["18,36,54","3つ","○"]],good:"確かに共通。ただし規則の説明には浅い。"},
-  {id:"include5",text:"どれも5を含む",core:false,checks:[["12,24,36","5なし","×"],["15,30,45","5あり","○"],["18,36,54","5なし","×"]],bad:"全部には5がない。"}
- ],
- required:["plus_same","times123"],
- lessons:[
-  ["spark","使える見方は2つ。","同じ数ずつ増える／1倍・2倍・3倍"],
-  ["think","12,24,36は、12ずつ増えている。","12 → 24 → 36\n+12　+12"],
-  ["spark","でも倍率で見るともっときれい。","12×1, 12×2, 12×3"],
-  ["think","15,30,45も同じように言えるかな。次へを押す前に声で答えよう。","15×1, 15×2, 15×3"],
-  ["ok","18,36,54も同じ。","18×1, 18×2, 18×3"],
-  ["ok","並びは、差で見るか倍率で見るか。2つの見方を持つと強い。","差を見る／倍を見る"]
- ]
+id:"even",
+text:"3つとも偶数どうし",
+good:false,
+rows:[
+["33×37","奇数×奇数","×"],
+["42×48","偶数×偶数","○"],
+["76×74","偶数×偶数","○"]
+]
+},
+{
+id:"sameDiff",
+text:"差が全部同じ",
+good:false,
+rows:[
+["33×37","差4","×"],
+["42×48","差6","×"],
+["76×74","差2","×"]
+]
+},
+{
+id:"twodigit",
+text:"全部2けた×2けた",
+good:false,
+rows:[
+["33×37","2けた","○"],
+["42×48","2けた","○"],
+["76×74","2けた","○"]
+]
+},
+{
+id:"sum10",
+text:"10の位を足すと10",
+good:false,
+rows:[
+["33×37","3+3=6","×"],
+["42×48","4+4=8","×"],
+["76×74","7+7=14","×"]
+]
 }
 ];
 
-let current=0, selected=new Set(), goodSet=new Set(), lessonStep=0;
+const lessons = [
+`<div class="step">
+33×37 を分けてみよう<br><br>
+33 = 30 + 3<br>
+37 = 30 + 7
+</div>`,
 
-function $(id){return document.getElementById(id)}
-function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));$(id).classList.add("active")}
-function rabbit(k){let img=$("rabbit");img.src=R[k]||R.wait;img.classList.remove("bump");void img.offsetWidth;img.classList.add("bump")}
-function speech(t){$("speech").textContent=t}
-function showMenu(){renderMenu();show("menu")}
-function renderMenu(){
- const box=$("menuList");box.innerHTML="";
- trainings.forEach((t,i)=>{
-   box.innerHTML+=`<div class="menu-card"><h2>${t.title}</h2><p>${t.desc}</p><button class="primary" onclick="start(${i})">はじめる</button></div>`;
- });
+`<div class="step">
+30 から矢印を出す<br><br>
+30 → 30 = 30×30<br>
+30 → 7 = 30×7
+</div>
+
+<div class="arrow-grid">
+<div class="arrow-card">
+30×30 = 900
+</div>
+<div class="arrow-card">
+30×7 = 210
+</div>
+</div>`,
+
+`<div class="step">
+3 からも矢印を出す
+</div>
+
+<div class="arrow-grid">
+<div class="arrow-card">
+3×30 = 90
+</div>
+<div class="arrow-card">
+3×7 = 21
+</div>
+</div>`,
+
+`<div class="step">
+つまり全部で4つ
+</div>
+
+<div class="arrow-grid">
+<div class="arrow-card">900</div>
+<div class="arrow-card">210</div>
+<div class="arrow-card">90</div>
+<div class="arrow-card">21</div>
+</div>`,
+
+`<div class="step">
+ここに注目！<br><br>
+210 + 90
+</div>
+
+<div class="small">
+210 = 30が7回<br>
+90 = 30が3回
+</div>`,
+
+`<div class="step">
+つまり<br><br>
+30が合計10回
+</div>
+
+<div class="step">
+30×7 + 3×30<br>
+↓<br>
+<span class="highlight">30×(7+3)</span><br>
+↓<br>
+<span class="highlight">30×10</span>
+</div>`,
+
+`<div class="step">
+最後に全部を足す
+</div>
+
+<div class="arrow-grid">
+<div class="arrow-card">900</div>
+<div class="arrow-card">300</div>
+<div class="arrow-card">21</div>
+</div>`,
+
+`<div class="step">
+答え！<br><br>
+33×37 = <span class="highlight">1221</span>
+</div>`,
+
+`<div class="step">
+42×48 と 76×74 も、<br>
+同じようにできるかな？<br><br>
+次へを押す前に、<br>
+声に出して考えてみよう！
+</div>`
+];
+
+let selected = new Set();
+let step = 0;
+
+const choices = document.getElementById("choices");
+
+data.forEach(d=>{
+const b=document.createElement("button");
+b.className="choice";
+b.textContent=d.text;
+b.onclick=()=>{
+if(selected.has(d.id)){
+selected.delete(d.id);
+b.classList.remove("selected");
+}else{
+selected.add(d.id);
+b.classList.add("selected");
 }
-function start(i=0){
- current=i;selected=new Set();goodSet=new Set();
- const t=trainings[current];
- $("trainBrand").textContent=t.title;
- $("problemTitle").textContent="3つに共通しているものはどれ？";
- $("instruction").textContent=t.instruction;
- $("numbers").innerHTML=t.nums.map(n=>`<div class="num">${n}</div>`).join("");
- $("selCount").textContent=0;$("goodCount").textContent=0;
- $("labBody").innerHTML="検証すると、選んだ仮説ごとに3つの式で○×が出ます。";$("labBody").className="instruction";
- $("nextArea").innerHTML="";
- renderChoices();rabbit("wait");speech("共通していそうな仮説を選んでみよう。");show("train");
+};
+choices.appendChild(b);
+});
+
+function check(){
+const result=document.getElementById("result");
+result.innerHTML="";
+
+data.filter(d=>selected.has(d.id)).forEach(d=>{
+let ok=d.rows.every(r=>r[2]=="○");
+
+let html=`<div class="${ok?'good':'bad'}"><b>${d.text}</b><br>`;
+
+d.rows.forEach(r=>{
+html+=`${r[0]} → ${r[1]} ${r[2]}<br>`;
+});
+
+html+=`</div>`;
+result.innerHTML+=html;
+});
+
+const good1 = selected.has("ones10");
+const good2 = selected.has("same10");
+
+if(good1 && good2){
+document.getElementById("nextArea").innerHTML=
+'<div style="margin-top:16px"><button onclick="startFlow()">どうして計算が楽になる？</button></div>';
 }
-function renderChoices(){
- const t=trainings[current], box=$("choices");box.innerHTML="";
- t.choices.forEach(c=>{
-   const b=document.createElement("button");b.className="choice";
-   if(selected.has(c.id))b.classList.add("selected");
-   if(goodSet.has(c.id))b.classList.add("good");
-   b.textContent=c.text;
-   b.onclick=()=>{selected.has(c.id)?selected.delete(c.id):selected.add(c.id);$("selCount").textContent=selected.size;renderChoices()};
-   box.appendChild(b);
- });
 }
-function resetSelect(){selected=new Set();$("selCount").textContent=0;renderChoices();speech("選び直したね。どの仮説で検証する？");rabbit("wait")}
-function verify(){
- if(selected.size===0){rabbit("miss");speech("まずは1つ以上選んでみよう。");return}
- const t=trainings[current], chosen=t.choices.filter(c=>selected.has(c.id));
- $("labBody").innerHTML="";$("nextArea").innerHTML="";
- chosen.forEach((c,i)=>setTimeout(()=>addHypo(c),i*850));
- setTimeout(()=>{
-   const ok=t.required.every(id=>goodSet.has(id));
-   if(ok){rabbit("ok");speech("中心になる仮説がそろった！次は、どう使うか見よう。");$("nextArea").innerHTML='<button class="primary" onclick="startLesson()">解説を1つずつ見る</button>'}
-   else{rabbit("hmm");speech("まだ中心になる仮説が足りないかも。もう一度選んでみよう。");$("nextArea").innerHTML='<button class="green" onclick="resetSelect()">もう一度選ぶ</button>'}
- },chosen.length*850+300);
+
+function startFlow(){
+document.getElementById("flow").classList.add("active");
+step=0;
+renderStep();
+window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});
 }
-function addHypo(c){
- const ok=c.checks.every(x=>x[2]=="○");
- if(ok)goodSet.add(c.id);
- $("goodCount").textContent=goodSet.size;
- let html=`<div class="hypo"><div class="hypo-head"><div>${c.text}</div><div class="badge ${ok?'good':'bad'}">${ok?'3/3 成立':'不成立'}</div></div>`;
- c.checks.forEach(r=>html+=`<div class="row"><div>${r[0]}</div><div>${r[1]}</div><div class="mark ${r[2]=='○'?'ok':'ng'}">${r[2]}</div></div>`);
- html+=`<div class="${ok?'summary-good':'summary-bad'}">${ok?(c.good||"これは共通点。"):(c.bad||"これは3つ全部には当てはまらない。")}</div></div>`;
- $("labBody").insertAdjacentHTML("beforeend",html);
- renderChoices();rabbit(ok?"spark":"hmm");speech(ok?"これは3つ全部に当てはまるね。":"これだと3つ全部は説明しきれないね。");
+
+function renderStep(){
+document.getElementById("stepArea").innerHTML=lessons[step];
 }
-function startLesson(){lessonStep=0;renderLesson();show("lesson")}
-function renderLesson(){
- const s=trainings[current].lessons[lessonStep];
- $("lessonBrand").textContent=trainings[current].title+"：解説";
- $("lessonText").textContent=s[1];$("lessonFormula").textContent=s[2];$("lessonRabbit").src=R[s[0]]||R.ok;
+
+function nextStep(){
+step++;
+if(step>=lessons.length){
+step=lessons.length-1;
+return;
 }
-function nextLesson(){
- lessonStep++;
- if(lessonStep>=trainings[current].lessons.length){alert("トレーニング完了！次は実践モードへ。");showMenu();return}
- renderLesson();
+renderStep();
+window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});
 }
 </script>
 </body>
