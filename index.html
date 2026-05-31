@@ -528,7 +528,17 @@ function nextStep(){
   }
 
   if(step > 7){
-    alert("ここまで！42×48と76×74も同じ流れで考えられるかな？");
+    const answerBox = document.getElementById("answer");
+    if(!document.getElementById("finishButtons")){
+      answerBox.insertAdjacentHTML("beforeend", `
+        <div id="finishButtons" style="margin-top:18px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+          <button onclick="restartFlow()">もう一度見る</button>
+          <button onclick="location.href='index2.html'">実践モードへ</button>
+        </div>
+      `);
+    }
+    document.getElementById("speech").textContent = "ここまで！次は42×48と76×74でも同じ流れを使えるか試そう。";
+    return;
   }
 }
 </script>
